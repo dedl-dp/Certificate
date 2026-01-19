@@ -463,7 +463,7 @@
     async function loadExcelData() {
         try {
             // قراءة ملف الإكسل (يجب أن يكون اسمه data.xlsx وموجود بجانب ملف الموقع)
-            const response = await fetch('C:/Users/njoud/Downloads/data.xlsx');
+            const response = await fetch('./data.xlsx');
             const arrayBuffer = await response.arrayBuffer();
             
             // تحويل البيانات
@@ -676,3 +676,4 @@
 </script>
 </body>
 </html>
+
