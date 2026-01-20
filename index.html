@@ -1,679 +1,568 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الشهادات المهنية</title>
-    <!-- استدعاء الخط (سيعمل عند الاتصال، وسيعود لخط النظام الجميل عند الانقطاع) -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>دليل الشهادات المهنية - جامعة الأميرة نورة</title>
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة قراءة ملفات الإكسل (SheetJS) -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     
     <style>
         :root {
-            --primary: #00695C;        /* أخضر غامق رسمي */
-            --primary-light: #4DB6AC;  /* أخضر فاتح */
-            --accent: #FFC107;         /* لون ذهبي للتميز */
-            --bg-body: #F4F7F6;        /* خلفية رمادية فاتحة جداً */
-            --surface: #FFFFFF;        /* لون البطاقات */
-            --text-primary: #263238;
-            --text-secondary: #546E7A;
-            --radius: 12px;
-            --shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+            /* لوحة الألوان الجديدة المتدرجة */
+            --color-1: #027680; /* بترولي غامق */
+            --color-2: #49baaa; /* تيفاني متوسط */
+            --color-3: #42b677; /* أخضر فاتح */
+            
+            --gradient-main: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
+            --gradient-accent: linear-gradient(45deg, var(--color-2), var(--color-3));
+            
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --bg-main: #f8fafc;
+            --white: #ffffff;
+            --sidebar-width: 300px;
+            --radius: 16px;
         }
 
         * { box-sizing: border-box; outline: none; }
 
         body {
-            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0; padding: 0;
+            display: flex; height: 100vh; overflow: hidden;
         }
 
-        /* ================= HEADER ================= */
-        header {
-            background: var(--surface);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .brand-icon {
-            width: 45px;
-            height: 45px;
-            background: var(--primary);
+        /* --- Sidebar (القائمة الجانبية) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--gradient-main);
             color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            box-shadow: 4px 0 20px rgba(2, 118, 128, 0.15);
+            z-index: 100; flex-shrink: 0;
+            transition: 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .logo-icon {
+            width: 45px; height: 45px;
+            background: white; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--color-1); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logo-icon svg { width: 26px; fill: currentColor; }
+
+        .sidebar-title h1 { margin: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; }
+        .sidebar-title p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.8; font-weight: 300; }
+
+        .sidebar-menu { flex: 1; overflow-y: auto; padding: 15px 10px; }
+        .sidebar-menu::-webkit-scrollbar { width: 4px; }
+        .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+
+        .menu-group { margin-bottom: 8px; }
+        .menu-btn {
+            width: 100%; background: transparent; border: none; padding: 14px 20px;
+            color: white; text-align: right; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 500;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 12px; transition: 0.3s ease;
+        }
+        .menu-btn:hover { background: rgba(255,255,255,0.1); transform: translateX(-5px); }
+        .menu-btn.active { background: white; color: var(--color-1); box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-weight: 700; transform: translateX(0); }
+        .menu-btn.active .arrow-icon { fill: var(--color-1); transform: rotate(-90deg); }
+        
+        .arrow-icon { width: 10px; fill: rgba(255,255,255,0.7); transition: 0.3s; }
+
+        .submenu { 
+            display: none; margin-top: 5px; background: rgba(0,0,0,0.15); 
+            border-radius: 10px; overflow: hidden; 
+        }
+        .submenu.open { display: block; animation: slideDown 0.3s ease; }
+        .sub-item {
+            display: block; padding: 12px 20px 12px 15px; color: rgba(255,255,255,0.9);
+            text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .sub-item:hover { background: rgba(255,255,255,0.05); padding-right: 25px; }
+        .sub-item.current { background: rgba(255,255,255,0.1); border-left-color: var(--color-3); color: white; font-weight: bold; }
+
+        /* --- Main Content (المحتوى الرئيسي) --- */
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; background: var(--bg-main); }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--white); padding: 15px 40px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.03); z-index: 90;
         }
         
-        .brand-icon svg { width: 24px; height: 24px; fill: white; }
-
-        .brand-text h1 { margin: 0; font-size: 1.2rem; color: var(--primary); font-weight: 800; }
-        .brand-text p { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
-
-        .header-actions { display: flex; gap: 10px; }
-
-        .btn-pdf {
-            background: var(--text-primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
+        .search-wrapper { position: relative; width: 350px; }
+        .search-wrapper input {
+            width: 100%; padding: 12px 45px 12px 20px; border-radius: 30px; 
+            border: 1px solid #e2e8f0; background: #f8fafc; transition: 0.3s;
+            font-family: inherit; font-size: 0.95rem;
         }
-        .btn-pdf:hover { background: #000; transform: translateY(-2px); }
-        .btn-pdf svg { width: 18px; height: 18px; fill: white; }
+        .search-wrapper input:focus { border-color: var(--color-2); background: white; box-shadow: 0 0 0 4px rgba(73, 186, 170, 0.1); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 18px; fill: #94a3b8; }
 
-        /* ================= HERO & NAV ================= */
+        .btn-print {
+            background: var(--white); color: var(--color-1); border: 1px solid var(--color-1);
+            padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; font-family: inherit;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .btn-print:hover { background: var(--color-1); color: white; }
+
+        /* Scroll Area */
+        .scroll-area { flex: 1; overflow-y: auto; padding: 0; scroll-behavior: smooth; }
+
+        /* --- Hero Section (المقدمة) --- */
         .hero-section {
-            padding: 40px 20px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .breadcrumbs {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-        .breadcrumbs span { cursor: pointer; transition: 0.2s; }
-        .breadcrumbs span:hover { color: var(--primary); }
-        .breadcrumbs .active { color: var(--primary); cursor: default; }
-        .breadcrumbs svg { width: 14px; fill: #ccc; transform: rotate(180deg); }
-
-        .search-container {
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-        }
-        .search-container input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border: 1px solid #ddd;
-            border-radius: 50px;
-            font-family: inherit;
-            transition: 0.3s;
             background: white;
+            margin: 30px 40px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(2, 118, 128, 0.06);
+            background-image: linear-gradient(120deg, #fff 0%, #f0fdfa 100%);
+            border: 1px solid #e6f7f5;
+            position: relative;
+            overflow: hidden;
         }
-        .search-container input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 105, 92, 0.1); }
-        .search-icon {
-            position: absolute;
-            left: 15px; top: 50%;
-            transform: translateY(-50%);
-            width: 18px; height: 18px; fill: #999;
+        .hero-section::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%;
+            background: var(--gradient-accent);
         }
+        
+        .hero-title { font-size: 1.8rem; font-weight: 800; color: var(--color-1); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .hero-text h3 { font-size: 1.2rem; color: var(--color-2); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .hero-text p { color: var(--text-light); line-height: 1.8; font-size: 1rem; margin-bottom: 0; text-align: justify; }
+        
+        /* Grid */
+        .grid-container { padding: 0 40px 60px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
-        /* ================= GRID ================= */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-bottom: 60px;
-        }
-
-        /* ================= CARDS ================= */
+        /* Card Style */
         .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 30px 25px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: 100%;
+            background: white; border-radius: 16px; padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
         }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border-color: var(--color-2); }
+        .card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 100%; height: 4px; background: var(--gradient-accent); transform: scaleX(0); transition: 0.3s; transform-origin: right; }
+        .card:hover::after { transform: scaleX(1); }
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow);
-            border-color: var(--primary-light);
-        }
+        .card-header-row { display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; }
+        .provider-badge { font-size: 0.75rem; background: #f0fdfa; color: var(--color-1); padding: 5px 12px; border-radius: 20px; font-weight: bold; border: 1px solid #ccfbf1; }
+        
+        .card h3 { margin: 0 0 8px; font-size: 1.15rem; color: var(--text-dark); line-height: 1.5; font-weight: 700; }
+        .card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .card-icon-box {
-            width: 64px;
-            height: 64px;
-            background: rgba(0, 105, 92, 0.08);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-        .card:hover .card-icon-box { background: var(--primary); }
-        .card-icon-box svg { width: 30px; height: 30px; fill: var(--primary); transition: 0.3s; }
-        .card:hover .card-icon-box svg { fill: white; }
+        .card-footer { margin-top: auto; padding-top: 15px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; font-size: 0.85rem; color: #64748b; }
+        .icon-label { display: flex; align-items: center; gap: 6px; }
+        .icon-label svg { width: 16px; fill: var(--color-2); }
 
-        .card h3 { margin: 0 0 8px; font-size: 1.15rem; color: var(--text-primary); font-weight: 700; }
-        .card p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
-
-        /* Specific Styles for Cert Cards */
-        .card.cert-card {
-            align-items: flex-start;
-            text-align: right;
-            border-top: 4px solid var(--accent);
-        }
-        .card.cert-card .card-icon-box { width: 45px; height: 45px; margin-bottom: 15px; }
-        .card.cert-card .card-icon-box svg { width: 22px; height: 22px; }
-
-        /* ================= MODAL ================= */
+        /* Modal */
         .modal-overlay {
-            display: none;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            animation: fadeIn 0.2s ease-out;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); z-index: 1000;
+            backdrop-filter: blur(4px); align-items: center; justify-content: center;
         }
-
-        .modal-container {
-            background: var(--surface);
-            width: 90%; max-width: 800px;
-            margin: 40px auto;
-            border-radius: 16px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            animation: slideUp 0.3s ease-out;
+        .modal-box {
+            background: white; width: 90%; max-width: 800px; max-height: 90vh;
+            border-radius: 20px; overflow-y: auto; position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: fadeIn 0.3s;
         }
-
         .modal-header {
-            background: linear-gradient(135deg, var(--primary), #004D40);
-            padding: 30px;
-            color: white;
-            position: sticky; top: 0;
+            background: var(--gradient-main); color: white; padding: 30px;
+            position: sticky; top: 0; z-index: 10;
+            display: flex; justify-content: space-between; align-items: start;
         }
+        .close-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; }
+        .close-btn:hover { background: white; color: var(--color-1); }
 
-        .modal-title h2 { margin: 0; font-size: 1.5rem; }
-        .modal-title p { margin: 5px 0 0; opacity: 0.9; font-size: 0.95rem; }
+        .modal-body { padding: 40px; }
+        
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .info-card { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .lbl { font-size: 0.8rem; color: #64748b; margin-bottom: 5px; display: block; }
+        .val { font-weight: 700; color: var(--color-1); font-size: 1rem; }
 
-        .close-modal {
-            position: absolute; top: 20px; left: 20px;
-            background: rgba(255,255,255,0.2);
-            border: none; width: 32px; height: 32px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: 0.2s;
-        }
-        .close-modal:hover { background: white; }
-        .close-modal svg { width: 14px; fill: white; }
-        .close-modal:hover svg { fill: var(--primary); }
+        .section-title { font-size: 1.2rem; color: var(--color-1); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin: 30px 0 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .text-content { line-height: 1.8; color: #334155; font-size: 1rem; white-space: pre-line; }
 
-        .modal-body { padding: 30px; }
+        .btn-link { display: block; width: 100%; text-align: center; background: var(--color-1); color: white; padding: 16px; border-radius: 12px; text-decoration: none; font-weight: bold; margin-top: 30px; transition: 0.3s; }
+        .btn-link:hover { background: var(--color-2); }
 
-        /* Details Grid */
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+        /* Loader */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--color-3); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        .detail-item {
-            background: #FAFAFA;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #EEE;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .detail-icon {
-            width: 36px; height: 36px;
-            background: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .detail-icon svg { width: 18px; fill: var(--primary); }
-        .detail-text label { display: block; font-size: 0.75rem; color: #888; font-weight: bold; }
-        .detail-text span { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
-
-        .section-header {
-            display: flex; align-items: center; gap: 10px;
-            margin: 30px 0 15px;
-            border-bottom: 2px solid #F0F0F0;
-            padding-bottom: 10px;
-        }
-        .section-header h3 { margin: 0; color: var(--primary); font-size: 1.1rem; }
-        .section-header svg { width: 20px; fill: var(--primary); }
-
-        .text-block { background: #f9f9f9; padding: 20px; border-radius: 10px; line-height: 1.8; font-size: 0.95rem; color: #444; }
-
-        .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .tag {
-            background: rgba(0, 105, 92, 0.1); color: var(--primary);
-            padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;
-        }
-
-        .action-btn {
-            display: block; width: 100%;
-            background: var(--primary); color: white;
-            text-align: center; padding: 16px;
-            border-radius: 8px; text-decoration: none;
-            font-weight: bold; margin-top: 30px;
-            transition: 0.3s;
-        }
-        .action-btn:hover { background: #004D40; }
-
-        /* ================= PRINT STYLES ================= */
+        /* Print */
         @media print {
-            body { background: white; font-size: 12pt; }
-            header, .hero-section, .grid-container, .modal-overlay, .search-container { display: none !important; }
-            
-            #print-area { display: block !important; }
-            
-            .print-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px; }
-            .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: right; font-size: 10pt; }
-            .print-table th { background-color: #f0f0f0; font-weight: bold; }
-            .print-row-group { page-break-inside: avoid; }
+            .sidebar, .top-bar, .modal-overlay, .hero-section { display: none !important; }
+            #print-section { display: block !important; }
+            .main-content { height: auto; overflow: visible; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; direction: rtl; }
+            th, td { border: 1px solid #ccc; padding: 10px; text-align: right; }
+            th { background: #eee; }
         }
+        #print-section { display: none; padding: 40px; }
 
-        #print-area { display: none; padding: 40px; }
-
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
+        @media (max-width: 900px) {
+            .hero-content { grid-template-columns: 1fr; gap: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="brand">
-            <div class="brand-icon">
-                <!-- SVG University Icon -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>جاري تحميل الدليل...</p>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
             </div>
-            <div class="brand-text">
-                <h1>دليل الشهادات المهنية</h1>
-                <p>بوابة الشهادات الاحترافية والأكاديمية</p>
+            <div class="sidebar-title">
+                <h1>الدليل المهني</h1>
+                <p>جامعة الأميرة نورة</p>
             </div>
         </div>
-        <div class="header-actions">
-            <button class="btn-pdf" onclick="printGuide()">
-                <svg viewBox="0 0 24 24"><path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/></svg>
-                حفظ كـ PDF
-            </button>
+        <div class="sidebar-menu" id="sidebarMenu">
+            <!-- Menu Items Generated Here -->
         </div>
-    </header>
-
-    <!-- Navigation & Search -->
-    <div class="hero-section">
-        <div class="nav-bar">
-            <div class="breadcrumbs" id="breadcrumbs">
-                <!-- Populated via JS -->
-            </div>
-            <div class="search-container">
-                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                <input type="text" id="searchInput" placeholder="ابحث باسم الشهادة..." onkeyup="handleSearch()">
-            </div>
-        </div>
-    </div>
+    </aside>
 
     <!-- Main Content -->
-    <div id="container" class="grid-container">
-        <!-- Cards injected here -->
-    </div>
+    <main class="main-content">
+        <div class="top-bar">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="ابحث باسم الشهادة، الجهة، أو القسم..." onkeyup="handleSearch()">
+                <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </div>
+            <button class="btn-print" onclick="printGuide()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/></svg>
+                تصدير PDF
+            </button>
+        </div>
+
+        <div class="scroll-area">
+            
+            <!-- Hero Section (المقدمة) -->
+            <div class="hero-section">
+                <div class="hero-title">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#49baaa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    دليل الشهادات الاحترافية
+                </div>
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h3><svg width="20" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> مقدمة</h3>
+                        <p>يهدف هذا الدليل إلى تسليط الضوء على الشهادات الاحترافية المهمة في مختلف التخصصات، مع التركيز على كيفية استفادة طالبات جامعة الأميرة نورة بنت عبد الرحمن من هذه الشهادات لدعم رحلتهن الأكاديمية والمهنية. يقدم الدليل معلومات شاملة عن المتطلبات والإجراءات والجهات المانحة لكل شهادة.</p>
+                    </div>
+                    <div class="hero-text">
+                        <h3><svg width="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg> نبذة عن الدليل وأهدافه</h3>
+                        <p>تم إعداد هذا الدليل لتقديم قائمة شاملة من الشهادات الاحترافية في تخصصات متنوعة، كإدارة الأعمال، تقنية المعلومات، والهندسة. يهدف إلى دعم الطالبات في اختيار الشهادات الأنسب لتعزيز مهاراتهن المهنية وتحقيق جاهزية لسوق العمل.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="grid-container">
+                <h3 id="sectionTitle" style="margin-bottom:20px; color:var(--text-light);">اختر قسماً لعرض الشهادات</h3>
+                <div class="grid" id="cardsGrid">
+                    <!-- Cards will appear here -->
+                </div>
+            </div>
+        </div>
+    </main>
 
     <!-- Modal Details -->
-    <div id="modalOverlay" class="modal-overlay">
-        <div class="modal-container">
+    <div class="modal-overlay" id="certModal">
+        <div class="modal-box">
             <div class="modal-header">
-                <div class="modal-title">
-                    <h2 id="m-title-ar">اسم الشهادة</h2>
-                    <p id="m-title-en">Certificate Name</p>
+                <div>
+                    <h2 id="m-title" style="margin:0; font-size:1.4rem; font-weight:800;"></h2>
+                    <p id="m-sub" style="margin:5px 0 0; opacity:0.9; font-weight:300;"></p>
                 </div>
-                <button class="close-modal" onclick="closeModal()">
-                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                </button>
+                <button class="close-btn" onclick="closeModal()">×</button>
             </div>
             <div class="modal-body">
-                
-                <div class="text-block" style="background:#E0F2F1; color:#004D40; border-left:4px solid #00695C;">
-                    <strong style="display:block; margin-bottom:5px;">نبذة:</strong>
-                    <span id="m-desc"></span>
+                <div class="info-grid">
+                    <div class="info-card"><span class="lbl">الجهة المانحة</span><span class="val" id="m-provider"></span></div>
+                    <div class="info-card"><span class="lbl">المستوى</span><span class="val" id="m-level"></span></div>
+                    <div class="info-card"><span class="lbl">التكلفة</span><span class="val" id="m-cost"></span></div>
+                    <div class="info-card"><span class="lbl">اللغة</span><span class="val" id="m-lang"></span></div>
                 </div>
 
-                <div class="section-header">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    <h3>تفاصيل الشهادة</h3>
+                <div class="section-title"><svg width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg> نبذة عن الشهادة</div>
+                <div class="text-content" id="m-desc"></div>
+
+                <div class="section-title"><svg width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg> الموضوعات</div>
+                <div class="text-content" id="m-topics"></div>
+
+                <div class="info-grid" style="margin-top:30px;">
+                    <div class="info-card"><span class="lbl">مدة الاختبار</span><span class="val" id="m-dur"></span></div>
+                    <div class="info-card"><span class="lbl">عدد الأسئلة</span><span class="val" id="m-q"></span></div>
+                    <div class="info-card"><span class="lbl">الصلاحية</span><span class="val" id="m-valid"></span></div>
                 </div>
 
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
-                        <div class="detail-text"><label>الجهة المانحة</label><span id="m-provider"></span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></div>
-                        <div class="detail-text"><label>المستوى</label><span id="m-level"></span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg></div>
-                        <div class="detail-text"><label>اللغة</label><span id="m-lang"></span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
-                        <div class="detail-text"><label>التكلفة</label><span id="m-cost"></span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
-                        <div class="detail-text"><label>آلية التنفيذ</label><span id="m-mode"></span></div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-icon"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
-                        <div class="detail-text"><label>دعم هدف</label><span id="m-support"></span></div>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                    <h3>تفاصيل الاختبار</h3>
-                </div>
-                <div class="details-grid">
-                    <div class="detail-item"><strong>المدة:</strong> &nbsp;<span id="m-exam-duration"></span></div>
-                    <div class="detail-item"><strong>عدد الأسئلة:</strong> &nbsp;<span id="m-questions-count"></span></div>
-                    <div class="detail-item"><strong>الصلاحية:</strong> &nbsp;<span id="m-validity"></span></div>
-                </div>
-
-                <div class="section-header">
-                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
-                    <h3>الموضوعات</h3>
-                </div>
-                <div class="text-block" id="m-topics"></div>
-
-                <div class="section-header">
-                    <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
-                    <h3>المقررات المرتبطة</h3>
-                </div>
-                <div class="tag-container" id="m-courses"></div>
-
-                <a href="#" id="m-link" target="_blank" class="action-btn">زيارة موقع الشهادة الرسمي</a>
+                <a href="#" id="m-link" target="_blank" class="btn-link">زيارة الموقع الرسمي للشهادة</a>
             </div>
         </div>
     </div>
 
-    <!-- Hidden Print Area -->
-    <div id="print-area">
-        <div class="print-header">
-            <h1>دليل الشهادات المهنية الشامل</h1>
-            <p>تم استخراج هذا التقرير بتاريخ: <span id="print-date"></span></p>
+    <!-- Print Layout -->
+    <div id="print-section">
+        <div style="text-align:center; margin-bottom:40px; border-bottom:3px solid #027680; padding-bottom:20px;">
+            <h1 style="color:#027680;">دليل الشهادات المهنية</h1>
+            <p>جامعة الأميرة نورة بنت عبدالرحمن</p>
         </div>
-        <table class="print-table">
+        <table id="printTable">
             <thead>
                 <tr>
                     <th>الكلية</th>
                     <th>القسم</th>
-                    <th>اسم الشهادة</th>
+                    <th>الشهادة</th>
                     <th>الجهة المانحة</th>
                     <th>المستوى</th>
                 </tr>
             </thead>
-            <tbody id="print-body"></tbody>
+            <tbody id="printBody"></tbody>
         </table>
     </div>
 
 <script>
-    // ================= DATA =================
     let db = [];
 
+    // قراءة ملف الإكسل
     async function loadExcelData() {
         try {
-            // قراءة ملف الإكسل (يجب أن يكون اسمه data.xlsx وموجود بجانب ملف الموقع)
             const response = await fetch('./data.xlsx');
-            const arrayBuffer = await response.arrayBuffer();
             
-            // تحويل البيانات
-            const workbook = XLSX.read(arrayBuffer, {type: 'array'});
+            if (!response.ok) {
+                // في حالة عدم وجود الملف، استخدم قاعدة بيانات فارغة لتجنب تعطل الصفحة
+                console.warn("لم يتم العثور على data.xlsx، سيتم استخدام واجهة فارغة.");
+                document.getElementById('loader').style.display = 'none';
+                initSidebar();
+                return;
+            }
+
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
             
-            // تحويل الشيت إلى JSON
             db = XLSX.utils.sheet_to_json(worksheet);
+            console.log("تم تحميل", db.length, "سجل");
             
-            console.log("Excel Loaded:", db);
-            showColleges(); // تشغيل التطبيق
+            document.getElementById('loader').style.display = 'none';
+            initSidebar();
             
         } catch (error) {
-            console.error("Error loading Excel:", error);
-            document.getElementById('container').innerHTML = '<p style="text-align:center">لم يتم العثور على ملف البيانات (data.xlsx)</p>';
+            console.error(error);
+            document.getElementById('loader').innerHTML = `<p style="color:red">خطأ في تحميل البيانات</p>`;
         }
     }
 
-    // استبدل استدعاء showColleges() في آخر الملف بـ:
-    loadExcelData();
-    const container = document.getElementById('container');
-    const breadcrumbs = document.getElementById('breadcrumbs');
-    let viewState = { level: 'college', selectedCollege: null, selectedDept: null };
-
-    // --- Helpers ---
-    function getUnique(arr, key) {
-        return [...new Set(arr.map(item => item[key]))].filter(Boolean);
-    }
-
-    // --- Navigation Logic ---
-    function showColleges() {
-        viewState = { level: 'college', selectedCollege: null, selectedDept: null };
-        renderBreadcrumbs();
-        container.innerHTML = '';
+    // بناء القائمة الجانبية
+    function initSidebar() {
+        const menuContainer = document.getElementById('sidebarMenu');
+        menuContainer.innerHTML = ''; 
         
-        getUnique(db, 'college').forEach(col => {
-            const card = createCard(col, 'استعراض الأقسام', 'college', () => showDepartments(col));
-            container.appendChild(card);
+        // استخراج الكليات
+        const colleges = [...new Set(db.map(item => item.college))].filter(Boolean);
+
+        colleges.forEach(college => {
+            const group = document.createElement('div');
+            group.className = 'menu-group';
+
+            const btn = document.createElement('button');
+            btn.className = 'menu-btn';
+            btn.innerHTML = `<span>${college}</span> <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>`;
+            
+            const submenu = document.createElement('div');
+            submenu.className = 'submenu';
+            
+            // خيار عرض الكل
+            submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', 'all', this)">عرض جميع الشهادات</a>`;
+
+            // الأقسام
+            const depts = [...new Set(db.filter(i => i.college === college).map(i => i.department))].filter(Boolean);
+            
+            depts.forEach(dept => {
+                submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', '${dept}', this)">${dept}</a>`;
+            });
+
+            btn.onclick = () => {
+                // إغلاق القوائم الأخرى (Accordion Effect)
+                const isOpen = submenu.classList.contains('open');
+                document.querySelectorAll('.submenu').forEach(s => s.classList.remove('open'));
+                document.querySelectorAll('.menu-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.querySelector('.arrow-icon').style.transform = 'rotate(0deg)';
+                });
+                
+                if(!isOpen) {
+                    submenu.classList.add('open');
+                    btn.classList.add('active');
+                    btn.querySelector('.arrow-icon').style.transform = 'rotate(-90deg)';
+                }
+            };
+
+            group.appendChild(btn);
+            group.appendChild(submenu);
+            menuContainer.appendChild(group);
         });
     }
 
-    function showDepartments(collegeName) {
-        viewState = { level: 'dept', selectedCollege: collegeName, selectedDept: null };
-        renderBreadcrumbs();
-        container.innerHTML = '';
+    // فلترة وعرض البطاقات
+    function filterByDept(college, dept, element) {
+        // Highlighting Active Item
+        document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('current'));
+        element.classList.add('current');
 
-        const colData = db.filter(i => i.college === collegeName);
-        getUnique(colData, 'department').forEach(dept => {
-            const card = createCard(dept, collegeName, 'dept', () => showCertificates(collegeName, dept));
-            container.appendChild(card);
-        });
-    }
+        // Scroll to Grid
+        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
 
-    function showCertificates(collegeName, deptName) {
-        viewState = { level: 'cert', selectedCollege: collegeName, selectedDept: deptName };
-        renderBreadcrumbs();
-        container.innerHTML = '';
+        // Update Title
+        const titleSec = document.getElementById('sectionTitle');
+        titleSec.innerHTML = dept === 'all' ? `جميع شهادات: <span style="color:#027680">${college}</span>` : `قسم: <span style="color:#027680">${dept}</span>`;
 
-        const certs = db.filter(i => i.college === collegeName && i.department === deptName);
-        renderCertList(certs);
-    }
-
-    function renderCertList(list) {
-        container.innerHTML = '';
-        if(list.length === 0) {
-            container.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#999;">لا توجد نتائج.</p>';
-            return;
+        // Filter Data
+        let filtered = db.filter(i => i.college === college);
+        if(dept !== 'all') {
+            filtered = filtered.filter(i => i.department === dept);
         }
-        list.forEach(cert => {
-            const title = cert.title_ar || cert.title_en;
-            const sub = cert.title_ar ? cert.title_en : '';
-            const card = createCard(title, sub, 'cert', () => openModal(cert));
-            container.appendChild(card);
-        });
+        renderCards(filtered);
     }
 
-    // --- UI Builders ---
-    function createCard(title, subtitle, type, onClick) {
-        const div = document.createElement('div');
-        div.className = `card ${type === 'cert' ? 'cert-card' : ''}`;
-        
-        let iconSvg = '';
-        if(type === 'college') iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>'; // Univ
-        else if(type === 'dept') iconSvg = '<svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>'; // Dept
-        else iconSvg = '<svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>'; // Cert
-
-        div.innerHTML = `
-            <div class="card-icon-box">${iconSvg}</div>
-            <h3>${title}</h3>
-            <p>${subtitle}</p>
-        `;
-        div.onclick = onClick;
-        return div;
-    }
-
-    function renderBreadcrumbs() {
-        let html = `<span onclick="showColleges()">الرئيسية</span>`;
-        if(viewState.selectedCollege) {
-            html += `<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg> 
-                     <span onclick="showDepartments('${viewState.selectedCollege}')">${viewState.selectedCollege}</span>`;
-        }
-        if(viewState.selectedDept) {
-            html += `<svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg> 
-                     <span class="active">${viewState.selectedDept}</span>`;
-        }
-        breadcrumbs.innerHTML = html;
-        document.getElementById('searchInput').value = '';
-    }
-
-    // --- Search ---
+    // البحث
     function handleSearch() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        if(q.length < 2) {
-            if(viewState.level === 'college') showColleges();
-            else if(viewState.level === 'dept') showDepartments(viewState.selectedCollege);
-            else showCertificates(viewState.selectedCollege, viewState.selectedDept);
-            return;
-        }
-        const results = db.filter(item => 
-            (item.title_ar && item.title_ar.toLowerCase().includes(q)) ||
-            (item.title_en && item.title_en.toLowerCase().includes(q))
+        if(q.length < 2) return;
+
+        // Scroll to Grid
+        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('sectionTitle').innerText = 'نتائج البحث...';
+
+        const filtered = db.filter(item => 
+            (item.title_ar && item.title_ar.toString().toLowerCase().includes(q)) ||
+            (item.title_en && item.title_en.toString().toLowerCase().includes(q)) ||
+            (item.provider && item.provider.toString().toLowerCase().includes(q)) ||
+            (item.department && item.department.toString().toLowerCase().includes(q))
         );
-        container.innerHTML = '';
-        renderCertList(results);
+        renderCards(filtered);
     }
 
-    // --- Modal Logic ---
-    const modal = document.getElementById('modalOverlay');
-    
-    function openModal(data) {
-        document.getElementById('m-title-ar').innerText = data.title_ar || data.title_en;
-        document.getElementById('m-title-en').innerText = data.title_ar ? data.title_en : '';
-        document.getElementById('m-desc').innerText = data.description || 'لا يتوفر وصف';
+    // رسم البطاقات
+    function renderCards(data) {
+        const grid = document.getElementById('cardsGrid');
+        grid.innerHTML = '';
 
-        const set = (id, val) => document.getElementById(id).innerText = (val && val !== '') ? val : '-';
-        
-        set('m-provider', data.provider);
-        set('m-level', data.level);
-        set('m-lang', data.language);
-        set('m-cost', data.cost);
-        set('m-mode', data.mode);
-        set('m-support', data.is_supported);
-        
-        set('m-exam-duration', data.exam_duration);
-        set('m-questions-count', data.questions_count);
-        set('m-validity', data.validity);
-
-        document.getElementById('m-topics').innerText = data.topics || 'غير محدد';
-        
-        // Courses
-        const coursesDiv = document.getElementById('m-courses');
-        coursesDiv.innerHTML = '';
-        for(let i=1; i<=4; i++) {
-            if(data[`course_${i}`]) {
-                coursesDiv.innerHTML += `<span class="tag">${data[`course_${i}`]}</span>`;
-            }
+        if(data.length === 0) {
+            grid.innerHTML = `<div style="text-align:center; color:#999; grid-column:1/-1; padding:20px;">لا توجد نتائج مطابقة</div>`;
+            return;
         }
-        if(coursesDiv.innerHTML === '') coursesDiv.innerHTML = '<span style="color:#999;font-size:0.9rem">لا يوجد مقررات مرتبطة</span>';
 
-        // Link
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-header-row">
+                    <span class="provider-badge">${item.provider || 'N/A'}</span>
+                </div>
+                <h3>${item.title_ar || item.title_en}</h3>
+                <p>${item.description ? item.description.substring(0, 100) + '...' : 'لا يوجد وصف متاح'}</p>
+                <div class="card-footer">
+                    <div class="icon-label">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                        ${item.level || '-'}
+                    </div>
+                    <div class="icon-label">
+                        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                        ${item.cost || '-'}
+                    </div>
+                </div>
+            `;
+            card.onclick = () => openModal(item);
+            grid.appendChild(card);
+        });
+    }
+
+    // فتح النافذة المنبثقة
+    function openModal(item) {
+        document.getElementById('m-title').innerText = item.title_ar || item.title_en;
+        document.getElementById('m-sub').innerText = item.title_ar ? item.title_en : '';
+        document.getElementById('m-desc').innerText = item.description || 'لا يوجد وصف';
+        document.getElementById('m-provider').innerText = item.provider || '-';
+        document.getElementById('m-level').innerText = item.level || '-';
+        document.getElementById('m-cost').innerText = item.cost || '-';
+        document.getElementById('m-lang').innerText = item.language || '-';
+        document.getElementById('m-topics').innerText = item.topics || 'غير محدد';
+        document.getElementById('m-dur').innerText = item.exam_duration || '-';
+        document.getElementById('m-q').innerText = item.questions_count || '-';
+        document.getElementById('m-valid').innerText = item.validity || '-';
+
         const btn = document.getElementById('m-link');
-        if(data.link && data.link.length > 5 && !data.link.includes('NO MATCH')) {
-            btn.href = data.link;
+        if(item.link && item.link.length > 5 && !item.link.includes('NO MATCH')) {
+            btn.href = item.link;
             btn.style.display = 'block';
-            btn.innerText = 'زيارة الموقع الرسمي / التسجيل';
         } else {
             btn.style.display = 'none';
         }
-
-        modal.style.display = 'block';
+        document.getElementById('certModal').style.display = 'flex';
     }
 
     function closeModal() {
-        modal.style.display = 'none';
+        document.getElementById('certModal').style.display = 'none';
     }
 
     window.onclick = function(e) {
-        if(e.target == modal) closeModal();
+        if(e.target == document.getElementById('certModal')) closeModal();
     }
 
-    // --- PDF / Print Logic ---
+    // طباعة PDF
     function printGuide() {
-        const printBody = document.getElementById('print-body');
-        printBody.innerHTML = '';
-        
-        // Populate Date
-        const date = new Date();
-        document.getElementById('print-date').innerText = date.toLocaleDateString('ar-SA');
-
-        // Populate Table
+        const tbody = document.getElementById('printBody');
+        tbody.innerHTML = '';
         db.forEach(item => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${item.college}</td>
-                <td>${item.department}</td>
+                <td>${item.college || '-'}</td>
+                <td>${item.department || '-'}</td>
                 <td>${item.title_ar || item.title_en}</td>
                 <td>${item.provider || '-'}</td>
                 <td>${item.level || '-'}</td>
             `;
-            printBody.appendChild(tr);
+            tbody.appendChild(tr);
         });
-
         window.print();
     }
 
-    // Initialize
+    // تشغيل التطبيق
     loadExcelData();
 
 </script>
+
 </body>
 </html>
-
