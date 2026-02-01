@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل الشهادات المهنية - جامعة الأميرة نورة</title>
+    <title>دليل الشهادات الاحترافية - جامعة الأميرة نورة</title>
     
     <!-- الخطوط -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -19,10 +19,8 @@
             --color-1: #027680;
             --color-2: #49baaa;
             --color-3: #42b677;
-            
             --gradient-main: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
             --gradient-sidebar: linear-gradient(180deg, var(--color-1) 0%, var(--color-2) 100%);
-            
             --text-dark: #1e293b;
             --text-light: #64748b;
             --bg-main: #f1f5f9;
@@ -30,7 +28,7 @@
             --sidebar-width: 300px;
         }
 
-        * { box-sizing: border-box; outline: none; }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Tajawal', sans-serif;
@@ -47,7 +45,8 @@
             color: white;
             display: flex; flex-direction: column;
             box-shadow: 4px 0 20px rgba(0,0,0,0.1);
-            z-index: 100; flex-shrink: 0;
+            z-index: 1000; flex-shrink: 0;
+            transition: transform 0.3s ease-in-out;
         }
 
         .sidebar-header {
@@ -83,22 +82,32 @@
         .submenu.open { display: block; animation: slideDown 0.3s ease; }
         
         .sub-item {
-            display: block; padding: 10px 20px 10px 15px; color: rgba(255,255,255,0.9);
+            display: block; padding: 12px 20px 12px 15px; color: rgba(255,255,255,0.9);
             text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
             border-left: 3px solid transparent;
         }
-        .sub-item:hover { background: rgba(255,255,255,0.05); padding-right: 25px; }
         .sub-item.current { background: rgba(255,255,255,0.15); border-left-color: var(--color-3); color: white; font-weight: bold; }
 
+        /* Overlay for Mobile Sidebar */
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px);
+        }
+
         /* --- Main Content --- */
-        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
 
         .top-bar {
             background: white; padding: 15px 40px; display: flex; justify-content: space-between;
-            align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); z-index: 90;
+            align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); z-index: 90; gap: 20px;
+        }
+
+        /* زر القائمة للجوال */
+        .mobile-menu-btn {
+            display: none; background: none; border: none; font-size: 1.5rem; color: var(--color-1); cursor: pointer;
         }
         
-        .search-wrapper { position: relative; width: 400px; }
+        .search-wrapper { position: relative; width: 400px; max-width: 100%; }
         .search-wrapper input {
             width: 100%; padding: 12px 45px 12px 20px; border-radius: 30px; 
             border: 1px solid #e2e8f0; background: #f8fafc; transition: 0.3s; font-family: inherit;
@@ -109,7 +118,7 @@
         .btn-print {
             background: white; color: var(--color-1); border: 1px solid var(--color-1);
             padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; font-family: inherit;
-            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s; white-space: nowrap;
         }
         .btn-print:hover { background: var(--color-1); color: white; }
 
@@ -150,7 +159,7 @@
         /* --- Modal --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 1000; backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.6); z-index: 1100; backdrop-filter: blur(5px);
             align-items: center; justify-content: center;
         }
         .modal-box {
@@ -183,14 +192,12 @@
         .topics-list li { margin-bottom: 5px; }
         .modal-text { line-height: 1.7; color: #334155; font-size: 0.95rem; white-space: pre-line; }
 
-        /* Courses Tags */
         .courses-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .course-badge { 
             background: #e6fffa; color: #027680; border: 1px solid #49baaa; 
             padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold;
         }
 
-        /* Buttons */
         .modal-actions { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
         .btn-link { flex: 2; text-align: center; background: var(--color-1); color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s; min-width: 200px; }
         .btn-link:hover { background: var(--color-2); }
@@ -201,15 +208,38 @@
         }
         .btn-modal-print:hover { background: #f0fdfa; }
 
+        /* --- Mobile Responsiveness (تعديلات الجوال) --- */
+        @media (max-width: 900px) {
+            .sidebar { 
+                position: fixed; right: -300px; height: 100%; transition: 0.3s; 
+            }
+            .sidebar.active { right: 0; }
+            .sidebar-overlay.active { display: block; }
+            
+            .mobile-menu-btn { display: block; }
+            .top-bar { padding: 15px 20px; }
+            .hero-section { margin: 20px; padding: 20px; }
+            .grid-container { padding: 20px; }
+            
+            .search-wrapper { flex: 1; }
+            .search-wrapper input { padding: 10px 35px 10px 10px; font-size: 0.9rem; }
+            .btn-print span { display: none; } /* إخفاء النص في الزر بالجوال */
+            .btn-print { padding: 10px; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+        }
+
+        @media (max-width: 600px) {
+            .modal-box { width: 95%; height: 95%; max-height: 95%; }
+            .modal-actions { flex-direction: column; }
+            .btn-link, .btn-modal-print { width: 100%; }
+        }
+
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--color-2); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ========================
-           PRINT STYLES
-           ======================== */
+        /* --- Print Styles --- */
         @media print {
             .sidebar, .top-bar, .hero-section { display: none !important; }
             .modal-overlay { display: none !important; } 
@@ -221,12 +251,10 @@
             body.printing-single #print-list-container { display: none !important; }
             body.printing-list #print-single-container { display: none !important; }
 
-            /* Table Style */
             table { width: 100%; border-collapse: collapse; margin-top: 20px; direction: rtl; }
             th, td { border: 1px solid #ccc; padding: 8px; text-align: right; font-size: 11px; }
             th { background: #eee; color: #000; }
             
-            /* Single Cert Style */
             .single-cert-print { padding: 20px; border: 2px solid #027680; }
             .print-header { text-align: center; border-bottom: 2px solid var(--color-1); padding-bottom: 20px; margin-bottom: 30px; }
             .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
@@ -246,6 +274,9 @@
         <p>جاري تحميل البيانات...</p>
     </div>
 
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -263,12 +294,17 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="top-bar">
+            <!-- Mobile Toggle -->
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
             <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="بحث شامل عن شهادة أو جهة..." onkeyup="handleSearch()">
+                <input type="text" id="searchInput" placeholder="بحث شامل..." onkeyup="handleSearch()">
                 <i class="fas fa-search search-icon"></i>
             </div>
             <button class="btn-print" onclick="printList()">
-                <i class="fas fa-file-pdf"></i> تصدير القائمة PDF
+                <i class="fas fa-file-pdf"></i> <span>تصدير القائمة</span>
             </button>
         </div>
 
@@ -276,12 +312,12 @@
             <div class="hero-section">
                 <div class="hero-block">
                     <div class="hero-title"><i class="fas fa-book-open"></i> مقدمة</div>
-                    <div class="hero-text">يهدف هذا الدليل إلى تسليط الضوء على الشهادات الاحترافية المهمة في مختلف التخصصات...</div>
+                    <div class="hero-text">يهدف هذا الدليل إلى تسليط الضوء على الشهادات الاحترافية المهمة في مختلف التخصصات، مع التركيز على كيفية استفادة طالبات جامعة الأميرة نورة بنت عبد الرحمن من هذه الشهادات لدعم رحلتهن الأكاديمية والمهنية.</div>
                 </div>
                 <hr style="border:0; border-top:1px solid #e2e8f0; margin: 20px 0;">
                 <div class="hero-block">
                     <div class="hero-title"><i class="fas fa-bullseye"></i> نبذة عن الدليل وأهدافه</div>
-                    <div class="hero-text">تم إعداد هذا الدليل لتقديم قائمة شاملة من الشهادات الاحترافية في تخصصات متنوعة...</div>
+                    <div class="hero-text">تم إعداد هذا الدليل لتقديم قائمة شاملة من الشهادات الاحترافية في تخصصات متنوعة، كإدارة الأعمال، تقنية المعلومات، والهندسة. يهدف إلى دعم الطالبات في اختيار الشهادات الأنسب لتعزيز مهاراتهن المهنية.</div>
                 </div>
             </div>
 
@@ -306,19 +342,15 @@
             </div>
             <div class="modal-body">
                 
-                <!-- 1. Basic Info Grid -->
                 <div class="info-grid">
                     <div class="info-item"><i class="fas fa-building"></i><span>الجهة المانحة</span><strong id="m-provider"></strong></div>
                     <div class="info-item"><i class="fas fa-chart-simple"></i><span>المستوى</span><strong id="m-level"></strong></div>
                     <div class="info-item"><i class="fas fa-money-bill-wave"></i><span>التكلفة</span><strong id="m-cost"></strong></div>
                     <div class="info-item"><i class="fas fa-globe"></i><span>اللغة</span><strong id="m-lang"></strong></div>
-                    
-                    <!-- NEW FIELDS -->
                     <div class="info-item"><i class="fas fa-laptop-code"></i><span>آلية التنفيذ</span><strong id="m-mode"></strong></div>
                     <div class="info-item"><i class="fas fa-hand-holding-dollar"></i><span>دعم هدف</span><strong id="m-support"></strong></div>
                 </div>
 
-                <!-- 2. Details Sections -->
                 <div class="modal-section">
                     <h4><i class="fas fa-info-circle"></i> نبذة عن الشهادة</h4>
                     <div class="modal-text" id="m-desc"></div>
@@ -334,7 +366,6 @@
                     <div id="m-topics"></div>
                 </div>
 
-                <!-- 3. Exam Details Grid -->
                 <div class="info-grid" style="margin-bottom:20px;">
                     <div class="info-item"><i class="fas fa-hourglass-half"></i><span>مدة الاختبار</span><strong id="m-dur"></strong></div>
                     <div class="info-item"><i class="fas fa-question-circle"></i><span>الأسئلة</span><strong id="m-q"></strong></div>
@@ -357,7 +388,6 @@
                     <div class="courses-container" id="m-courses"></div>
                 </div>
 
-                <!-- Actions -->
                 <div class="modal-actions">
                     <button class="btn-modal-print" onclick="printSingleCert()">
                         <i class="fas fa-file-pdf"></i> تصدير تفاصيل الشهادة PDF
@@ -370,7 +400,7 @@
         </div>
     </div>
 
-    <!-- ================= PRINT: LIST VIEW ================= -->
+    <!-- PRINT LAYOUTS -->
     <div id="print-list-container">
         <div style="text-align:center; margin-bottom:40px; border-bottom:3px solid #027680; padding-bottom:20px;">
             <h1 style="color:#027680;">تقرير الشهادات المهنية</h1>
@@ -391,10 +421,7 @@
         </table>
     </div>
 
-    <!-- ================= PRINT: SINGLE CERTIFICATE ================= -->
-    <div id="print-single-container">
-        <!-- Content Injected via JS -->
-    </div>
+    <div id="print-single-container"></div>
 
 <script>
     let db = [];
@@ -464,7 +491,16 @@
         });
     }
 
+    // Toggle Sidebar on Mobile
+    function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('active');
+        document.querySelector('.sidebar-overlay').classList.toggle('active');
+    }
+
     function filterByDept(college, dept, element) {
+        // Close sidebar on mobile if open
+        if(window.innerWidth <= 900) toggleSidebar();
+
         document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('current'));
         element.classList.add('current');
         document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
@@ -561,7 +597,6 @@
         document.getElementById('m-qtype').innerText = item.questions_type || '-';
         document.getElementById('m-valid').innerText = item.validity || '-';
 
-        // Courses Tags
         const coursesDiv = document.getElementById('m-courses');
         coursesDiv.innerHTML = '';
         for(let i=1; i<=4; i++) {
@@ -585,9 +620,7 @@
         document.getElementById('certModal').style.display = 'none';
     }
 
-    // --- PRINT FUNCTIONS ---
-
-    // 1. Print LIST (Filtered)
+    // PRINT: List
     function printList() {
         if (currentData.length === 0) {
             alert("لا توجد بيانات معروضة للطباعة. يرجى اختيار قسم أو البحث أولاً.");
@@ -613,14 +646,12 @@
         setTimeout(() => { document.body.className = ''; }, 1000);
     }
 
-    // 2. Print SINGLE Certificate
+    // PRINT: Single
     function printSingleCert() {
         if (!selectedCert) return;
         document.body.className = 'printing-single'; 
 
         const container = document.getElementById('print-single-container');
-        
-        // Prepare courses string
         let coursesStr = "";
         for(let i=1; i<=4; i++) {
             if(selectedCert[`course_${i}`]) coursesStr += selectedCert[`course_${i}`] + "، ";
