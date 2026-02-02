@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دليل الشهادات المهنية - جامعة الأميرة نورة</title>
     
     <!-- الخطوط -->
@@ -10,25 +10,25 @@
     
     <!-- مكتبة الأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- مكتبة Excel -->
-    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    
+
     <style>
         :root {
             --color-1: #027680;
             --color-2: #49baaa;
             --color-3: #42b677;
+            
             --gradient-main: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
             --gradient-sidebar: linear-gradient(180deg, var(--color-1) 0%, var(--color-2) 100%);
+            
             --text-dark: #1e293b;
             --text-light: #64748b;
-            --bg-main: #f8fafc;
+            --bg-main: #f1f5f9;
             --white: #ffffff;
             --sidebar-width: 300px;
+            --topbar-height: 70px;
         }
 
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; outline: none; }
 
         body {
             font-family: 'Tajawal', sans-serif;
@@ -38,253 +38,282 @@
             display: flex; height: 100vh; overflow: hidden;
         }
 
-        /* --- Sidebar (القائمة الجانبية) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--gradient-sidebar);
             color: white;
             display: flex; flex-direction: column;
             box-shadow: 4px 0 20px rgba(0,0,0,0.1);
-            z-index: 1000;
-            flex-shrink: 0;
-            height: 100%;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000; flex-shrink: 0;
+            transition: transform 0.3s ease-in-out;
         }
 
-        /* تنسيق خاص للجوال (إصلاح المشكلة) */
+        /* في الجوال، نخفي السايد بار افتراضياً */
         @media (max-width: 900px) {
             .sidebar {
                 position: fixed;
+                right: -320px; /* مخفي بالكامل */
                 top: 0;
-                right: -320px; /* مخفي بالكامل خارج الشاشة */
-                width: 280px;
                 height: 100%;
-                z-index: 9999; /* أعلى طبقة على الإطلاق */
+                width: 280px;
             }
-            .sidebar.active {
-                right: 0; /* إظهار القائمة */
-                box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-            }
+            .sidebar.active { right: 0; }
         }
 
         .sidebar-header {
-            padding: 25px 20px;
+            padding: 30px 20px;
             background: rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; gap: 15px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .header-content { display: flex; align-items: center; gap: 10px; }
-
         .logo-box {
-            width: 40px; height: 40px;
+            width: 45px; height: 45px;
             background: white; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            color: var(--color-1); font-size: 20px;
+            color: var(--color-1); font-size: 24px;
         }
 
-        .sidebar-title h1 { margin: 0; font-size: 1rem; font-weight: 800; }
-        .sidebar-title p { margin: 2px 0 0; font-size: 0.75rem; opacity: 0.8; }
+        .sidebar-title h1 { margin: 0; font-size: 1.1rem; font-weight: 800; }
+        .sidebar-title p { margin: 2px 0 0; font-size: 0.8rem; opacity: 0.8; }
 
-        /* زر إغلاق القائمة في الجوال */
-        .close-sidebar-btn {
-            display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;
-        }
-        @media (max-width: 900px) { .close-sidebar-btn { display: block; } }
-
-        .sidebar-menu { 
-            flex: 1; overflow-y: auto; padding: 10px; 
-            -webkit-overflow-scrolling: touch;
-        }
+        .sidebar-menu { flex: 1; overflow-y: auto; padding: 15px 10px; }
         
         .menu-btn {
-            width: 100%; background: transparent; border: none; padding: 14px 15px;
-            color: white; text-align: right; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 500;
+            width: 100%; background: transparent; border: none; padding: 14px 20px;
+            color: white; text-align: right; cursor: pointer; font-family: inherit; font-size: 0.95rem;
             display: flex; justify-content: space-between; align-items: center;
-            border-radius: 10px; transition: 0.2s; margin-bottom: 5px;
+            border-radius: 12px; transition: all 0.2s ease;
         }
-        .menu-btn:active { background: rgba(255,255,255,0.2); }
-        .menu-btn.active { background: white; color: var(--color-1); font-weight: bold; }
-        .menu-btn.active i { transform: rotate(-90deg); color: var(--color-1); }
-        
-        .submenu { display: none; margin-top: 2px; background: rgba(0,0,0,0.2); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
-        .submenu.open { display: block; }
-        
-        .sub-item {
-            display: block; padding: 12px 20px 12px 15px; color: rgba(255,255,255,0.9);
-            text-decoration: none; font-size: 0.9rem; cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .sub-item.current { background: rgba(255,255,255,0.15); border-right: 4px solid var(--color-3); color: white; font-weight: bold; }
+        .menu-btn:hover { background: rgba(255,255,255,0.15); transform: translateX(-4px); }
 
-        /* تظليل الخلفية */
+        .menu-btn .icon { margin-left: 12px; width: 20px; text-align: center; opacity: 0.9; }
+
+        .submenu {
+            max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+            background: rgba(0,0,0,0.08); border-radius: 12px; margin: 6px 0 12px;
+        }
+        .submenu.open { max-height: 1000px; padding: 10px 0; }
+
+        .sub-item {
+            display: block; width: 100%; background: transparent; border: none;
+            color: rgba(255,255,255,0.9); padding: 10px 22px; text-align: right;
+            cursor: pointer; font-family: inherit; font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .sub-item:hover { background: rgba(255,255,255,0.1); padding-right: 28px; }
+        .sub-item.current { background: rgba(255,255,255,0.18); font-weight: 700; }
+
+        /* --- OVERLAY للجوال --- */
         .sidebar-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 9998; backdrop-filter: blur(3px);
-            opacity: 0; transition: opacity 0.3s;
+            background: rgba(0,0,0,0.5); z-index: 999; backdrop-filter: blur(2px);
         }
-        .sidebar-overlay.active { display: block; opacity: 1; }
+        .sidebar-overlay.active { display: block; }
 
-        /* --- Main Content --- */
+        /* --- MAIN CONTENT --- */
         .main-content { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
 
+        /* تثبيت الشريط العلوي ليظهر دائماً */
         .top-bar {
             background: white; padding: 10px 20px; 
             display: flex; justify-content: space-between; align-items: center; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
-            z-index: 900; height: 70px; flex-shrink: 0;
+            z-index: 900; /* قيمة عالية ليكون فوق المحتوى */
+            position: sticky; top: 0; /* تثبيت الشريط */
+            height: var(--topbar-height);
         }
 
         .mobile-menu-btn {
-            display: none; background: none; border: none; font-size: 1.6rem; color: var(--color-1); cursor: pointer; padding: 5px;
+            display: none; background: none; border: none; font-size: 22px;
+            color: var(--color-1); cursor: pointer; padding: 8px; border-radius: 10px;
         }
-        @media (max-width: 900px) { .mobile-menu-btn { display: block; } }
-        
-        .search-wrapper { position: relative; flex: 1; max-width: 400px; margin: 0 15px; }
-        .search-wrapper input {
-            width: 100%; padding: 10px 40px 10px 15px; border-radius: 30px; 
-            border: 1px solid #e2e8f0; background: #f8fafc; transition: 0.3s; font-family: inherit; font-size: 0.9rem;
+        .mobile-menu-btn:hover { background: #f1f5f9; }
+
+        .search-wrapper { position: relative; width: 400px; max-width: 60vw; }
+        #searchInput {
+            width: 100%; padding: 12px 16px 12px 45px;
+            border: 2px solid #e2e8f0; border-radius: 14px;
+            font-family: inherit; font-size: 0.95rem; transition: all 0.2s ease;
         }
-        .search-wrapper input:focus { border-color: var(--color-2); background: white; }
-        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+        #searchInput:focus { border-color: var(--color-2); box-shadow: 0 0 0 4px rgba(73,186,170,0.15); }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
         .btn-print {
-            background: white; color: var(--color-1); border: 1px solid var(--color-1);
-            padding: 8px 15px; border-radius: 30px; cursor: pointer; font-weight: bold; font-family: inherit;
-            display: flex; align-items: center; gap: 8px; transition: 0.3s; white-space: nowrap; font-size: 0.85rem;
+            background: var(--gradient-main); border: none; color: white;
+            padding: 10px 18px; border-radius: 14px; cursor: pointer;
+            font-family: inherit; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(2,118,128,0.2);
         }
+        .btn-print:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(2,118,128,0.25); }
 
-        /* Scroll Area */
-        .scroll-area { flex: 1; overflow-y: auto; padding: 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .scroll-area { flex: 1; overflow-y: auto; padding: 0; scroll-behavior: smooth; }
 
-        /* Hero */
+        /* --- Hero Section --- */
         .hero-section {
             background: white; margin: 20px; padding: 25px;
-            border-radius: 16px; box-shadow: 0 4px 15px rgba(2, 118, 128, 0.05);
-            border-top: 4px solid var(--color-2);
+            border-radius: 20px; box-shadow: 0 8px 20px rgba(2, 118, 128, 0.05);
         }
-        .hero-title { font-size: 1.1rem; font-weight: 800; color: var(--color-1); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .hero-title i { color: var(--color-3); font-size: 1.2rem; }
-        .hero-text { color: var(--text-light); line-height: 1.7; font-size: 0.9rem; text-align: justify; }
+        .hero-title { margin: 0 0 6px; font-size: 1.6rem; font-weight: 900; color: var(--color-1); }
+        .hero-subtitle { margin: 0; color: var(--text-light); line-height: 1.7; font-size: 0.95rem; }
 
-        /* Grid */
-        .grid-container { padding: 10px 20px 60px; }
-        .grid-header { margin-bottom: 15px; color: var(--text-light); font-weight: bold; font-size: 0.95rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-
-        .card {
-            background: white; border-radius: 14px; padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03); border: 1px solid #f1f5f9;
-            transition: 0.2s; cursor: pointer; display: flex; flex-direction: column;
-            position: relative; overflow: hidden;
+        /* --- Grid Cards --- */
+        .grid-container { padding: 0 20px 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+        .cert-card {
+            background: white; border-radius: 18px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(2,118,128,0.08);
+            transition: all 0.25s ease; display: flex; flex-direction: column;
+            border: 1px solid rgba(2,118,128,0.08);
         }
-        .card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--gradient-main); opacity: 0.8; }
-        .provider-badge { font-size: 0.7rem; background: #e0f2f1; color: var(--color-1); padding: 4px 8px; border-radius: 6px; font-weight: bold; align-self: flex-start; margin-bottom: 10px; }
-        .card h3 { margin: 0 0 8px; font-size: 1.05rem; color: var(--text-dark); line-height: 1.4; font-weight: 700; }
-        .card p { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; font-size: 0.8rem; color: #64748b; }
-        .footer-item { display: flex; align-items: center; gap: 5px; }
-        .footer-item i { color: var(--color-2); }
+        .cert-card:hover { transform: translateY(-4px); box-shadow: 0 16px 35px rgba(2,118,128,0.14); }
+        .card-header {
+            padding: 18px 18px 14px;
+            background: linear-gradient(135deg, rgba(2,118,128,0.08) 0%, rgba(73,186,170,0.08) 100%);
+            border-bottom: 1px solid rgba(2,118,128,0.08);
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(2,118,128,0.12); color: var(--color-1);
+            padding: 6px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;
+        }
+        .cert-name { margin: 10px 0 0; font-size: 1.05rem; font-weight: 800; line-height: 1.45; }
+        .card-body { padding: 16px 18px 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .meta-row { display: flex; gap: 10px; align-items: center; color: var(--text-light); font-size: 0.9rem; }
+        .meta-row i { color: var(--color-2); width: 18px; text-align: center; }
 
-        /* Modal */
+        .card-actions { padding: 14px 18px 18px; display: flex; gap: 10px; }
+        .btn {
+            flex: 1; border: none; cursor: pointer; padding: 10px 12px;
+            border-radius: 14px; font-family: inherit; font-weight: 700;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-primary { background: var(--gradient-main); color: white; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(2,118,128,0.22); }
+        .btn-outline { background: #fff; border: 2px solid #e2e8f0; color: var(--text-dark); }
+        .btn-outline:hover { border-color: var(--color-2); box-shadow: 0 0 0 4px rgba(73,186,170,0.12); }
+
+        /* --- Modal --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 3500; backdrop-filter: blur(3px);
+            background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(5px);
             align-items: center; justify-content: center;
         }
-        .modal-box {
-            background: white; width: 95%; max-width: 700px; max-height: 90vh;
-            border-radius: 16px; overflow-y: auto; animation: fadeIn 0.2s;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        .modal-overlay.active { display: flex; }
+        .modal {
+            width: min(900px, 92vw);
+            background: white; border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+            animation: fadeIn 0.25s ease;
         }
         .modal-header {
-            background: var(--gradient-main); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: start; position: sticky; top: 0; z-index: 10;
+            padding: 18px 20px;
+            background: var(--gradient-main);
+            color: white;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        .close-btn { background: rgba(255,255,255,0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
-        .modal-body { padding: 20px; }
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .info-item { background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center; }
-        .info-item i { color: var(--color-2); font-size: 1.1rem; margin-bottom: 4px; display: block; }
-        .info-item span { display: block; font-size: 0.7rem; color: #64748b; }
-        .info-item strong { display: block; font-size: 0.85rem; color: var(--text-dark); margin-top: 2px; }
-        .topics-list { line-height: 1.6; color: #334155; font-size: 0.9rem; padding-right: 18px; margin: 0; }
-        .modal-text { line-height: 1.6; color: #334155; font-size: 0.9rem; white-space: pre-line; text-align: justify; }
-        .courses-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .course-badge { background: #e6fffa; color: #027680; border: 1px solid #49baaa; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
-        .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
-        .btn-link, .btn-modal-print { width: 100%; text-align: center; padding: 12px; border-radius: 10px; font-weight: bold; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; }
-        .btn-link { background: var(--color-1); color: white; }
-        .btn-modal-print { border: 2px solid var(--color-1); background: white; color: var(--color-1); cursor: pointer; }
+        .modal-header h2 { margin: 0; font-size: 1.1rem; font-weight: 900; }
+        .modal-close {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 38px; height: 38px; border-radius: 12px; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; font-size: 18px;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.25); }
 
+        .modal-content { padding: 18px 20px 20px; max-height: 75vh; overflow: auto; }
+        .modal-section { margin-bottom: 14px; }
+        .modal-section h3 { margin: 0 0 8px; font-size: 0.95rem; color: var(--color-1); }
+        .modal-section p { margin: 0; color: var(--text-light); line-height: 1.75; }
+
+        .no-results {
+            margin: 20px; padding: 18px;
+            background: white; border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(2,118,128,0.06);
+            color: var(--text-light);
+        }
+
+        /* ========================
+           RESPONSIVE
+           ======================== */
         @media (max-width: 900px) {
-            .btn-print span { display: none; }
-            .btn-print { padding: 0; width: 40px; height: 40px; justify-content: center; border-radius: 50%; }
-            .search-wrapper { margin: 0 10px; }
+
+            /* تثبيت الشريط العلوي في الجوال */
+            .top-bar{
+                position: fixed;
+                top: 0;
+                right: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1500;
+            }
+
+            /* تعويض ارتفاع الشريط حتى لا يغطي المحتوى */
+            .scroll-area{
+                padding-top: var(--topbar-height);
+            }
+
+            /* اجعل السايدبار يبدأ تحت الشريط العلوي لتفادي التغطية */
+            .sidebar{
+                top: var(--topbar-height);
+                height: calc(100% - var(--topbar-height));
+                z-index: 1400;
+            }
+
+            .sidebar-overlay{
+                z-index: 1300;
+            }
+
+            .mobile-menu-btn { display: block; }
+            .search-wrapper { width: 100%; }
+            .btn-print span { display: none; } /* Hide text, keep icon on mobile */
+            .btn-print { padding: 10px; width: 40px; justify-content: center; border-radius: 50%; }
+            .grid-container { padding-bottom: 80px; }
         }
 
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid var(--color-2); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid var(--color-2); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ========================
-           PRINT STYLES (Simple Table)
+           PRINT STYLES (تحسينات الطباعة)
            ======================== */
         @media print {
-            .sidebar, .top-bar, .hero-section, .modal-overlay, .mobile-menu-btn, .sidebar-overlay { display: none !important; }
-            
-            body, .main-content { background: white; height: auto; overflow: visible; margin: 0; padding: 0; display: block; }
-            
-            #print-container { display: block !important; padding: 20px; width: 100%; }
-            
-            .print-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
-            .print-header h1 { font-size: 18pt; margin: 0; }
-            .print-header p { font-size: 12pt; margin: 5px 0; }
-
-            table { width: 100%; border-collapse: collapse; direction: rtl; }
-            th, td { border: 1px solid #000; padding: 8px; text-align: right; font-size: 10pt; vertical-align: top; }
-            th { background-color: #f0f0f0 !important; font-weight: bold; -webkit-print-color-adjust: exact; }
-            
-            /* Column Widths */
-            th:nth-child(1) { width: 15%; }
-            th:nth-child(2) { width: 15%; }
-            th:nth-child(3) { width: 25%; }
-            th:nth-child(4) { width: 30%; }
-            th:nth-child(5) { width: 15%; }
+            body { overflow: visible; height: auto; display: block; }
+            .sidebar, .top-bar, #loader, .sidebar-overlay, .modal-overlay { display: none !important; }
+            .main-content { height: auto; overflow: visible; }
+            .scroll-area { overflow: visible; height: auto; padding-top: 0 !important; }
+            .hero-section { margin: 0 0 15px; box-shadow: none; border: 1px solid #e2e8f0; }
+            .grid-container { padding: 0; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .cert-card { box-shadow: none; border: 1px solid #e2e8f0; break-inside: avoid; }
+            .card-actions { display: none; }
         }
-
-        #print-container { display: none; }
-
     </style>
 </head>
-<body>
 
+<body>
     <div id="loader">
         <div class="spinner"></div>
-        <p>جاري تحميل البيانات...</p>
+        <div style="color:#64748b;font-weight:700;">جارٍ التحميل...</div>
     </div>
-
-    <!-- Mobile Sidebar Overlay -->
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="header-content">
-                <div class="logo-box"><i class="fas fa-university"></i></div>
-                <div class="sidebar-title">
-                    <h1>الدليل المهني</h1>
-                    <p>جامعة الأميرة نورة</p>
-                </div>
+            <div class="logo-box"><i class="fas fa-award"></i></div>
+            <div class="sidebar-title">
+                <h1>دليل الشهادات المهنية</h1>
+                <p>جامعة الأميرة نورة</p>
             </div>
-            <!-- زر إغلاق صريح للجوال -->
-            <button class="close-sidebar-btn" onclick="toggleSidebar()">
-                <i class="fas fa-times"></i>
-            </button>
         </div>
         <div class="sidebar-menu" id="sidebarMenu"></div>
     </aside>
+
+    <!-- Overlay -->
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -298,417 +327,244 @@
                 <input type="text" id="searchInput" placeholder="بحث شامل..." onkeyup="handleSearch()">
                 <i class="fas fa-search search-icon"></i>
             </div>
-            <button class="btn-print" onclick="printList()">
-                <i class="fas fa-file-pdf"></i> <span>تصدير القائمة</span>
+            <button class="btn-print" onclick="
+                window.print();
+            ">
+                <i class="fas fa-print"></i><span>طباعة</span>
             </button>
         </div>
 
-        <div class="scroll-area">
-            <div class="hero-section">
-                <div class="hero-block">
-                    <div class="hero-title"><i class="fas fa-book-open"></i> مقدمة</div>
-                    <div class="hero-text">يهدف هذا الدليل إلى تسليط الضوء على الشهادات الاحترافية المهمة في مختلف التخصصات، مع التركيز على كيفية استفادة طالبات جامعة الأميرة نورة بنت عبد الرحمن من هذه الشهادات لدعم رحلتهن الأكاديمية والمهنية.</div>
-                </div>
-                <hr style="border:0; border-top:1px solid #e2e8f0; margin: 15px 0;">
-                <div class="hero-block">
-                    <div class="hero-title"><i class="fas fa-bullseye"></i> نبذة عن الدليل وأهدافه</div>
-                    <div class="hero-text">تم إعداد هذا الدليل لتقديم قائمة شاملة من الشهادات الاحترافية في تخصصات متنوعة، كإدارة الأعمال، تقنية المعلومات، والهندسة. يهدف إلى دعم الطالبات في اختيار الشهادات الأنسب لتعزيز مهاراتهن المهنية.</div>
-                </div>
-            </div>
+        <div class="scroll-area" id="scrollArea">
+            <section class="hero-section" id="heroSection">
+                <h2 class="hero-title">دليل الشهادات المهنية</h2>
+                <p class="hero-subtitle">
+                    استعرض الشهادات المهنية المعتمدة حسب الكلية والتخصص. يمكنك استخدام البحث الشامل أو التنقل عبر القائمة الجانبية للوصول بسرعة.
+                </p>
+            </section>
 
-            <div class="grid-container">
-                <div class="grid-header" id="sectionTitle">
-                    <i class="fas fa-th-large"></i> اختر كلية وقسماً لعرض الشهادات
-                </div>
-                <div class="grid" id="cardsGrid"></div>
+            <div class="grid-container" id="certGrid"></div>
+            <div class="no-results" id="noResults" style="display:none;">
+                لا توجد نتائج مطابقة لبحثك.
             </div>
         </div>
     </main>
 
-    <!-- Modal (Popup) -->
-    <div class="modal-overlay" id="certModal">
-        <div class="modal-box">
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation();">
             <div class="modal-header">
-                <div>
-                    <h2 id="m-title" style="margin:0; font-size:1.1rem;"></h2>
-                    <p id="m-sub" style="margin:2px 0 0; opacity:0.9; font-weight:300; font-size:0.85rem;"></p>
-                </div>
-                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
+                <h2 id="modalTitle">تفاصيل الشهادة</h2>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
             </div>
-            <div class="modal-body">
-                
-                <div class="info-grid">
-                    <div class="info-item"><i class="fas fa-building"></i><span>الجهة المانحة</span><strong id="m-provider"></strong></div>
-                    <div class="info-item"><i class="fas fa-chart-simple"></i><span>المستوى</span><strong id="m-level"></strong></div>
-                    <div class="info-item"><i class="fas fa-money-bill-wave"></i><span>التكلفة</span><strong id="m-cost"></strong></div>
-                    <div class="info-item"><i class="fas fa-globe"></i><span>اللغة</span><strong id="m-lang"></strong></div>
-                    <div class="info-item"><i class="fas fa-laptop-code"></i><span>آلية التنفيذ</span><strong id="m-mode"></strong></div>
-                    <div class="info-item"><i class="fas fa-hand-holding-dollar"></i><span>دعم هدف</span><strong id="m-support"></strong></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-info-circle"></i> نبذة عن الشهادة</h4>
-                    <div class="modal-text" id="m-desc"></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-list-check"></i> المتطلبات</h4>
-                    <div class="modal-text" id="m-req"></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-list-ul"></i> الموضوعات</h4>
-                    <div id="m-topics"></div>
-                </div>
-
-                <div class="info-grid" style="margin-bottom:20px;">
-                    <div class="info-item"><i class="fas fa-hourglass-half"></i><span>مدة الاختبار</span><strong id="m-dur"></strong></div>
-                    <div class="info-item"><i class="fas fa-question-circle"></i><span>الأسئلة</span><strong id="m-q"></strong></div>
-                    <div class="info-item"><i class="fas fa-vial"></i><span>نوع الأسئلة</span><strong id="m-qtype"></strong></div>
-                    <div class="info-item"><i class="fas fa-calendar-check"></i><span>الصلاحية</span><strong id="m-valid"></strong></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-user-plus"></i> إجراءات التقديم</h4>
-                    <div class="modal-text" id="m-reg"></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-book"></i> المصادر التعليمية</h4>
-                    <div class="modal-text" id="m-res"></div>
-                </div>
-
-                <div class="modal-section">
-                    <h4><i class="fas fa-graduation-cap"></i> المقررات المرتبطة</h4>
-                    <div class="courses-container" id="m-courses"></div>
-                </div>
-
-                <div class="modal-actions">
-                    <button class="btn-modal-print" onclick="printSingleCert()">
-                        <i class="fas fa-file-pdf"></i> تصدير الشهادة (جدول)
-                    </button>
-                    <a href="#" id="m-link" target="_blank" class="btn-link">
-                        <i class="fas fa-external-link-alt"></i> زيارة الموقع الرسمي
-                    </a>
-                </div>
-            </div>
+            <div class="modal-content" id="modalContent"></div>
         </div>
     </div>
 
-    <!-- Unified Print Container -->
-    <div id="print-container">
-        <div class="print-header">
-            <h1>تقرير الشهادات المهنية</h1>
-            <p>جامعة الأميرة نورة بنت عبدالرحمن</p>
-            <p id="print-subtitle" style="font-size:10pt; margin-top:5px;"></p>
-        </div>
-        <table id="print-table">
-            <thead id="print-thead"></thead>
-            <tbody id="print-tbody"></tbody>
-        </table>
-    </div>
+    <script>
+    // =========================
+    // DATA (ضع بياناتك هنا)
+    // =========================
+    const data = window.data || [];
 
-<script>
-    let db = [];
-    let currentData = [];
-    let selectedCert = null;
-
-    async function loadExcelData() {
-        try {
-            const response = await fetch('./data.xlsx');
-            if (!response.ok) {
-                console.warn("Using empty DB");
-                document.getElementById('loader').style.display = 'none';
-                initSidebar();
-                return;
-            }
-            const arrayBuffer = await response.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            db = XLSX.utils.sheet_to_json(worksheet);
-            currentData = []; 
-            document.getElementById('loader').style.display = 'none';
-            initSidebar();
-        } catch (error) {
-            console.error(error);
-            document.getElementById('loader').innerHTML = `<p style="color:red">خطأ في تحميل البيانات</p>`;
-        }
+    // =========================
+    // UI HELPERS
+    // =========================
+    function openSidebar() {
+        document.querySelector('.sidebar').classList.add('active');
+        document.querySelector('.sidebar-overlay').classList.add('active');
+        document.body.classList.add('sidebar-open');
     }
 
-    function initSidebar() {
-        const menuContainer = document.getElementById('sidebarMenu');
-        menuContainer.innerHTML = ''; 
-        const colleges = [...new Set(db.map(item => item.college))].filter(Boolean);
-
-        colleges.forEach(college => {
-            const group = document.createElement('div');
-            group.className = 'menu-group';
-            const btn = document.createElement('button');
-            btn.className = 'menu-btn';
-            btn.innerHTML = `<span>${college}</span> <i class="fas fa-chevron-left arrow-icon"></i>`;
-            
-            const submenu = document.createElement('div');
-            submenu.className = 'submenu';
-            submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', 'all', this)">عرض جميع الشهادات</a>`;
-
-            const depts = [...new Set(db.filter(i => i.college === college).map(i => i.department))].filter(Boolean);
-            depts.forEach(dept => {
-                submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', '${dept}', this)">${dept}</a>`;
-            });
-
-            btn.onclick = () => {
-                const isOpen = submenu.classList.contains('open');
-                document.querySelectorAll('.submenu').forEach(s => s.classList.remove('open'));
-                document.querySelectorAll('.menu-btn').forEach(b => {
-                    b.classList.remove('active');
-                    b.querySelector('.arrow-icon').style.transform = 'rotate(0deg)';
-                });
-                
-                if(!isOpen) {
-                    submenu.classList.add('open');
-                    btn.classList.add('active');
-                    btn.querySelector('.arrow-icon').style.transform = 'rotate(-90deg)';
-                }
-            };
-            group.appendChild(btn);
-            group.appendChild(submenu);
-            menuContainer.appendChild(group);
-        });
+    function closeSidebar() {
+        document.querySelector('.sidebar').classList.remove('active');
+        document.querySelector('.sidebar-overlay').classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     }
 
     function toggleSidebar() {
-        const sidebar = document.querySelector('.sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        
-        if (sidebar.classList.contains('active')) {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        } else {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        }
+        const isOpen = document.querySelector('.sidebar').classList.contains('active');
+        if (isOpen) closeSidebar();
+        else openSidebar();
     }
 
-    function filterByDept(college, dept, element) {
-        if(window.innerWidth <= 900) toggleSidebar(); 
+    // إذا رجع المستخدم للديسكتوب، نظّفي حالة السايدبار
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) closeSidebar();
+    });
 
-        document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('current'));
-        element.classList.add('current');
-        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
-
-        const titleSec = document.getElementById('sectionTitle');
-        titleSec.innerHTML = dept === 'all' ? 
-            `<i class="fas fa-layer-group"></i> شهادات: <span style="color:var(--color-1)">${college}</span>` : 
-            `<i class="fas fa-folder-open"></i> قسم: <span style="color:var(--color-1)">${dept}</span>`;
-
-        let filtered = db.filter(i => i.college === college);
-        if(dept !== 'all') {
-            filtered = filtered.filter(i => i.department === dept);
-        }
-        currentData = filtered; 
-        renderCards(filtered);
+    function closeModal(e) {
+        if (e && e.target && e.target.classList && !e.target.classList.contains('modal-overlay')) return;
+        document.getElementById('modalOverlay').classList.remove('active');
     }
 
-    function handleSearch() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        if(q.length < 2) return;
+    // =========================
+    // RENDER SIDEBAR MENU
+    // =========================
+    function buildSidebarMenu(items) {
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        sidebarMenu.innerHTML = '';
 
-        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
-        document.getElementById('sectionTitle').innerHTML = '<i class="fas fa-search"></i> نتائج البحث...';
+        const grouped = {};
+        items.forEach(item => {
+            const college = item.college || 'غير محدد';
+            const dept = item.department || 'غير محدد';
+            if (!grouped[college]) grouped[college] = {};
+            if (!grouped[college][dept]) grouped[college][dept] = 0;
+            grouped[college][dept]++;
+        });
 
-        const filtered = db.filter(item => 
-            (item.title_ar && String(item.title_ar).toLowerCase().includes(q)) ||
-            (item.title_en && String(item.title_en).toLowerCase().includes(q)) ||
-            (item.provider && String(item.provider).toLowerCase().includes(q))
-        );
-        currentData = filtered; 
-        renderCards(filtered);
+        Object.keys(grouped).sort().forEach(college => {
+            const collegeId = 'col_' + btoa(unescape(encodeURIComponent(college))).replace(/=/g,'');
+
+            const wrapper = document.createElement('div');
+
+            const btn = document.createElement('button');
+            btn.className = 'menu-btn';
+            btn.innerHTML = `
+                <span><i class="fas fa-university icon"></i>${college}</span>
+                <i class="fas fa-chevron-down"></i>
+            `;
+            btn.onclick = () => {
+                const submenu = wrapper.querySelector('.submenu');
+                submenu.classList.toggle('open');
+            };
+
+            const submenu = document.createElement('div');
+            submenu.className = 'submenu';
+
+            Object.keys(grouped[college]).sort().forEach(dept => {
+                const sub = document.createElement('button');
+                sub.className = 'sub-item';
+                sub.innerHTML = `${dept} <span style="opacity:.75;font-weight:700">(${grouped[college][dept]})</span>`;
+                sub.onclick = () => filterByDept(college, dept, sub);
+                submenu.appendChild(sub);
+            });
+
+            wrapper.appendChild(btn);
+            wrapper.appendChild(submenu);
+            sidebarMenu.appendChild(wrapper);
+        });
     }
 
-    function renderCards(data) {
-        const grid = document.getElementById('cardsGrid');
+    // =========================
+    // RENDER GRID
+    // =========================
+    function renderGrid(items) {
+        const grid = document.getElementById('certGrid');
         grid.innerHTML = '';
 
-        if(data.length === 0) {
-            grid.innerHTML = `<div style="text-align:center; color:#999; grid-column:1/-1; padding:20px;">لا توجد نتائج مطابقة</div>`;
+        if (!items.length) {
+            document.getElementById('noResults').style.display = 'block';
             return;
+        } else {
+            document.getElementById('noResults').style.display = 'none';
         }
 
-        data.forEach(item => {
+        items.forEach(item => {
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'cert-card';
+
+            const level = item.level || '—';
+            const college = item.college || '—';
+            const dept = item.department || '—';
+            const name = item.name || '—';
+            const provider = item.provider || '—';
+
             card.innerHTML = `
-                <span class="provider-badge">${item.provider || 'N/A'}</span>
-                <h3>${item.title_ar || item.title_en}</h3>
-                <p>${item.description ? String(item.description).substring(0, 100) + '...' : 'لا يوجد وصف متاح'}</p>
-                <div class="card-footer">
-                    <div class="footer-item"><i class="fas fa-chart-simple"></i> ${item.level || '-'}</div>
-                    <div class="footer-item"><i class="fas fa-money-bill-wave"></i> ${item.cost || '-'}</div>
+                <div class="card-header">
+                    <span class="badge"><i class="fas fa-layer-group"></i>${level}</span>
+                    <h3 class="cert-name">${name}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="meta-row"><i class="fas fa-building-columns"></i><span>${college}</span></div>
+                    <div class="meta-row"><i class="fas fa-sitemap"></i><span>${dept}</span></div>
+                    <div class="meta-row"><i class="fas fa-landmark"></i><span>${provider}</span></div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick='openDetails(${JSON.stringify(item).replace(/'/g,"\\'")})'>
+                        <i class="fas fa-circle-info"></i> التفاصيل
+                    </button>
+                    <button class="btn btn-outline" onclick='copyName("${(name || "").replace(/"/g,'\\"')}")'>
+                        <i class="fas fa-copy"></i> نسخ
+                    </button>
                 </div>
             `;
-            card.onclick = function() { openModal(item); };
             grid.appendChild(card);
         });
     }
 
-    function formatTopicsHTML(text) {
-        if (!text) return '<div class="modal-text">غير محدد</div>';
-        let str = String(text);
-        let lines = str.split(/\r?\n|•| - /).filter(line => line.trim() !== '');
-        if (lines.length === 0) return `<div class="modal-text">${str}</div>`;
-        let html = '<ul class="topics-list">';
-        lines.forEach(line => {
-            let cleanLine = line.trim().replace(/^[\d]+[\.\/]\s*/, '');
-            html += `<li>${cleanLine}</li>`;
+    function openDetails(item) {
+        const modal = document.getElementById('modalOverlay');
+        const title = document.getElementById('modalTitle');
+        const content = document.getElementById('modalContent');
+
+        title.textContent = item.name || 'تفاصيل الشهادة';
+
+        const rows = [
+            {label:'الكلية', value: item.college},
+            {label:'التخصص/القسم', value: item.department},
+            {label:'الجهة المانحة', value: item.provider},
+            {label:'المستوى', value: item.level},
+            {label:'الوصف', value: item.description},
+            {label:'الرابط', value: item.link ? `<a href="${item.link}" target="_blank" rel="noopener">فتح الرابط</a>` : '—'},
+        ];
+
+        content.innerHTML = rows.map(r => `
+            <div class="modal-section">
+                <h3>${r.label}</h3>
+                <p>${r.value || '—'}</p>
+            </div>
+        `).join('');
+
+        modal.classList.add('active');
+    }
+
+    function copyName(text) {
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+            // يمكن إضافة Toast لاحقاً
         });
-        html += '</ul>';
-        return html;
     }
 
-    function openModal(item) {
-        selectedCert = item; 
+    // =========================
+    // FILTER + SEARCH
+    // =========================
+    function filterByDept(college, dept, element) {
+        // Close sidebar on mobile
+        if (window.innerWidth <= 900) closeSidebar();
 
-        document.getElementById('m-title').innerText = item.title_ar || item.title_en;
-        document.getElementById('m-sub').innerText = item.title_ar ? item.title_en : '';
-        document.getElementById('m-desc').innerText = item.description || 'لا يوجد وصف';
-        document.getElementById('m-provider').innerText = item.provider || '-';
-        document.getElementById('m-level').innerText = item.level || '-';
-        document.getElementById('m-cost').innerText = item.cost || '-';
-        document.getElementById('m-lang').innerText = item.language || '-';
-        document.getElementById('m-mode').innerText = item.mode || '-';
-        document.getElementById('m-support').innerText = item.is_supported || '-';
-        
-        document.getElementById('m-req').innerText = item.requirements || 'لا يوجد';
-        document.getElementById('m-topics').innerHTML = formatTopicsHTML(item.topics);
-        document.getElementById('m-reg').innerText = item.registration_steps || '-';
-        document.getElementById('m-res').innerText = item.resources || '-';
+        document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('current'));
+        element.classList.add('current');
 
-        document.getElementById('m-dur').innerText = item.exam_duration || '-';
-        document.getElementById('m-q').innerText = item.questions_count || '-';
-        document.getElementById('m-qtype').innerText = item.questions_type || '-';
-        document.getElementById('m-valid').innerText = item.validity || '-';
+        const filtered = data.filter(x =>
+            (x.college || '') === college && (x.department || '') === dept
+        );
 
-        const coursesDiv = document.getElementById('m-courses');
-        coursesDiv.innerHTML = '';
-        for(let i=1; i<=4; i++) {
-            if(item[`course_${i}`]) {
-                coursesDiv.innerHTML += `<span class="course-badge">${item[`course_${i}`]}</span>`;
-            }
-        }
-        if(coursesDiv.innerHTML === '') coursesDiv.innerHTML = '<span style="color:#999; font-size:0.8rem;">لا يوجد مقررات مرتبطة</span>';
-
-        const btn = document.getElementById('m-link');
-        if(item.link && item.link.length > 5 && !item.link.includes('NO MATCH')) {
-            btn.href = item.link;
-            btn.style.display = 'block';
-        } else {
-            btn.style.display = 'none';
-        }
-        document.getElementById('certModal').style.display = 'flex';
+        renderGrid(filtered);
+        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function closeModal() {
-        document.getElementById('certModal').style.display = 'none';
-    }
-
-    // ========== SIMPLE TABLE PRINTING ==========
-
-    // 1. Print List (Table)
-    function printList() {
-        if (currentData.length === 0) {
-            alert("لا توجد بيانات معروضة للطباعة.");
+    function handleSearch() {
+        const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+        if (!q) {
+            renderGrid(data);
             return;
         }
-        
-        const thead = document.getElementById('print-thead');
-        const tbody = document.getElementById('print-tbody');
-        document.getElementById('print-subtitle').innerText = `قائمة الشهادات - عدد النتائج: ${currentData.length}`;
-
-        thead.innerHTML = `
-            <tr>
-                <th width="15%">الكلية</th>
-                <th width="15%">القسم</th>
-                <th width="35%">اسم الشهادة</th>
-                <th width="20%">الجهة المانحة</th>
-                <th width="15%">المستوى</th>
-            </tr>
-        `;
-
-        tbody.innerHTML = '';
-        currentData.forEach(item => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${item.college || '-'}</td>
-                <td>${item.department || '-'}</td>
-                <td>${item.title_ar || item.title_en}</td>
-                <td>${item.provider || '-'}</td>
-                <td>${item.level || '-'}</td>
-            `;
-            tbody.appendChild(tr);
+        const filtered = data.filter(item => {
+            const blob = `${item.name||''} ${item.college||''} ${item.department||''} ${item.provider||''} ${item.level||''}`.toLowerCase();
+            return blob.includes(q);
         });
-        
-        window.print();
+        renderGrid(filtered);
     }
 
-    // 2. Print Single Cert (Vertical Table)
-    function printSingleCert() {
-        if (!selectedCert) return;
-
-        const thead = document.getElementById('print-thead');
-        const tbody = document.getElementById('print-tbody');
-        document.getElementById('print-subtitle').innerText = `تفاصيل شهادة: ${selectedCert.title_ar || selectedCert.title_en}`;
-
-        thead.innerHTML = `
-            <tr>
-                <th style="width:30%">العنصر</th>
-                <th style="width:70%">التفاصيل</th>
-            </tr>
-        `;
-
-        const addRow = (label, val) => {
-            if(!val) val = '-';
-            return `<tr><td style="font-weight:bold; background:#fafafa;">${label}</td><td>${val}</td></tr>`;
-        };
-
-        let coursesStr = "";
-        for(let i=1; i<=4; i++) {
-            if(selectedCert[`course_${i}`]) coursesStr += selectedCert[`course_${i}`] + "، ";
-        }
-        coursesStr = coursesStr.replace(/، $/, "");
-
-        tbody.innerHTML = `
-            ${addRow("اسم الشهادة (عربي)", selectedCert.title_ar)}
-            ${addRow("اسم الشهادة (إنجليزي)", selectedCert.title_en)}
-            ${addRow("الكلية", selectedCert.college)}
-            ${addRow("القسم", selectedCert.department)}
-            ${addRow("الجهة المانحة", selectedCert.provider)}
-            ${addRow("المستوى", selectedCert.level)}
-            ${addRow("التكلفة", selectedCert.cost)}
-            ${addRow("اللغة", selectedCert.language)}
-            ${addRow("آلية التنفيذ", selectedCert.mode)}
-            ${addRow("دعم هدف", selectedCert.is_supported)}
-            ${addRow("نبذة", selectedCert.description)}
-            ${addRow("الموضوعات", selectedCert.topics)}
-            ${addRow("المتطلبات", selectedCert.requirements)}
-            ${addRow("مدة الاختبار", selectedCert.exam_duration)}
-            ${addRow("عدد الأسئلة", selectedCert.questions_count)}
-            ${addRow("نوع الأسئلة", selectedCert.questions_type)}
-            ${addRow("الصلاحية", selectedCert.validity)}
-            ${addRow("إجراءات التقديم", selectedCert.registration_steps)}
-            ${addRow("المصادر", selectedCert.resources)}
-            ${addRow("المقررات المرتبطة", coursesStr)}
-        `;
-
-        window.print();
-    }
-
-    window.onclick = function(e) {
-        if(e.target == document.getElementById('certModal')) closeModal();
-    }
-
-    loadExcelData();
-
-</script>
-
+    // =========================
+    // INIT
+    // =========================
+    window.addEventListener('load', () => {
+        buildSidebarMenu(data);
+        renderGrid(data);
+        document.getElementById('loader').style.display = 'none';
+    });
+    </script>
 </body>
 </html>
