@@ -228,48 +228,146 @@
         .filter-section-main {
             background: white;
             margin: 20px;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(2, 118, 128, 0.05);
-            border-top: 5px solid var(--color-2);
-            animation: slideDown 0.3s ease;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .filter-section-main:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
+            border-color: rgba(73, 186, 170, 0.3);
         }
 
         .filter-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
 
-        .filter-header {
+        .filter-toggle-btn {
+            width: 100%;
+            background: linear-gradient(to left, #ffffff 0%, #f8fafc 100%);
+            border: none;
+            padding: 18px 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--color-1);
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
         }
 
-        .filter-header i {
+        .filter-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to left, rgba(73, 186, 170, 0.08) 0%, rgba(66, 182, 119, 0.05) 100%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-toggle-btn:hover::before {
+            width: 100%;
+        }
+
+        .filter-toggle-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .filter-toggle-btn:active {
+            transform: translateY(0);
+        }
+
+        .filter-toggle-btn > i:first-child {
             color: var(--color-2);
-            font-size: 1.2rem;
+            font-size: 20px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-toggle-btn:hover > i:first-child {
+            transform: scale(1.1);
+        }
+
+        .filter-toggle-btn > span {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-1);
+            flex: 1;
+            text-align: right;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .filter-arrow {
+            color: var(--text-light);
+            font-size: 14px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .filter-arrow.rotate {
+            transform: rotate(-180deg);
+            color: var(--color-2);
+        }
+
+        .filter-panel {
+            padding: 24px;
+            background: linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%);
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-panel.show {
+            max-height: 1000px;
+            opacity: 1;
         }
 
         .filter-items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .filter-item-main {
             display: flex;
             align-items: center;
-            padding: 15px;
-            background: linear-gradient(145deg, rgba(73, 186, 170, 0.05) 0%, rgba(66, 182, 119, 0.05) 100%);
-            border: 2px solid #e2e8f0;
+            padding: 14px 16px;
+            background: white;
+            border: 1.5px solid #e2e8f0;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-item-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to left, rgba(73, 186, 170, 0.06) 0%, rgba(66, 182, 119, 0.04) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .filter-item-main:hover::before {
+            width: 100%;
         }
 
         .filter-item-main:hover {
@@ -278,21 +376,36 @@
             box-shadow: 0 4px 12px rgba(73, 186, 170, 0.15);
         }
 
+        .filter-item-main:active {
+            transform: translateY(0);
+        }
+
+        .filter-item-main.active {
+            background: linear-gradient(135deg, rgba(73, 186, 170, 0.08) 0%, rgba(66, 182, 119, 0.08) 100%);
+            border-color: var(--color-3);
+        }
+
         .filter-item-main .filter-checkbox {
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--color-2);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
             border-radius: 6px;
             margin-left: 12px;
             position: relative;
             flex-shrink: 0;
-            transition: 0.2s;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             background: white;
+            z-index: 1;
+        }
+
+        .filter-item-main:hover .filter-checkbox {
+            border-color: var(--color-2);
         }
 
         .filter-item-main .filter-checkbox.checked {
-            background: var(--color-3);
+            background: linear-gradient(135deg, var(--color-3) 0%, var(--color-2) 100%);
             border-color: var(--color-3);
+            transform: scale(1.05);
         }
 
         .filter-item-main .filter-checkbox.checked::after {
@@ -300,60 +413,126 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(1);
             color: white;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: bold;
+            animation: checkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes checkPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         .filter-item-main .filter-label {
             color: var(--text-dark);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             flex: 1;
+            position: relative;
+            z-index: 1;
         }
 
         .filter-item-main .filter-count {
-            background: var(--gradient-main);
+            background: linear-gradient(135deg, var(--color-2) 0%, var(--color-3) 100%);
             color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 700;
-            min-width: 35px;
+            min-width: 28px;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(73, 186, 170, 0.2);
+            position: relative;
+            z-index: 1;
         }
 
         .clear-filters-btn-main {
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
             margin: 0 auto;
-            padding: 12px 20px;
+            padding: 12px 24px;
             background: white;
             border: 2px solid var(--color-1);
             color: var(--color-1);
             border-radius: 12px;
             font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clear-filters-btn-main::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--color-1);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .clear-filters-btn-main:hover::before {
+            width: 300%;
+            height: 300%;
         }
 
         .clear-filters-btn-main:hover {
-            background: var(--color-1);
             color: white;
+            border-color: var(--color-1);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(2, 118, 128, 0.3);
+            box-shadow: 0 6px 20px rgba(2, 118, 128, 0.25);
+        }
+
+        .clear-filters-btn-main:active {
+            transform: translateY(0);
+        }
+
+        .clear-filters-btn-main i,
+        .clear-filters-btn-main span {
+            position: relative;
+            z-index: 1;
         }
 
         @media (max-width: 768px) {
             .filter-items-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .filter-toggle-btn {
+                padding: 16px 20px;
+            }
+            
+            .filter-panel {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .filter-items-grid {
+                gap: 10px;
+            }
+            
+            .filter-item-main {
+                padding: 12px 14px;
             }
         }
 
@@ -549,40 +728,43 @@
             <!-- Advanced Filters Section -->
             <div class="filter-section-main" id="filterSection" style="display: none;">
                 <div class="filter-container">
-                    <div class="filter-header">
+                    <button class="filter-toggle-btn" onclick="toggleFilterPanel()">
                         <i class="fas fa-filter"></i>
                         <span>فلترة متقدمة</span>
-                    </div>
-                    
-                    <div class="filter-items-grid">
-                        <div class="filter-item-main" onclick="toggleFilter('support')">
-                            <div class="filter-checkbox" id="filter-support"></div>
-                            <span class="filter-label">مدعومة من هدف</span>
-                            <span class="filter-count" id="count-support">0</span>
-                        </div>
-                        
-                        <div class="filter-item-main" onclick="toggleFilter('free')">
-                            <div class="filter-checkbox" id="filter-free"></div>
-                            <span class="filter-label">مجانية</span>
-                            <span class="filter-count" id="count-free">0</span>
-                        </div>
-                        
-                        <div class="filter-item-main" onclick="toggleFilter('arabic')">
-                            <div class="filter-checkbox" id="filter-arabic"></div>
-                            <span class="filter-label">باللغة العربية</span>
-                            <span class="filter-count" id="count-arabic">0</span>
-                        </div>
-                        
-                        <div class="filter-item-main" onclick="toggleFilter('online')">
-                            <div class="filter-checkbox" id="filter-online"></div>
-                            <span class="filter-label">أونلاين</span>
-                            <span class="filter-count" id="count-online">0</span>
-                        </div>
-                    </div>
-                    
-                    <button class="clear-filters-btn-main" onclick="clearAllFilters()">
-                        <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
+                        <i class="fas fa-chevron-down filter-arrow" id="filterArrow"></i>
                     </button>
+                    
+                    <div class="filter-panel" id="filterPanel">
+                        <div class="filter-items-grid">
+                            <div class="filter-item-main" onclick="toggleFilter('support')">
+                                <div class="filter-checkbox" id="filter-support"></div>
+                                <span class="filter-label">مدعومة من هدف</span>
+                                <span class="filter-count" id="count-support">0</span>
+                            </div>
+                            
+                            <div class="filter-item-main" onclick="toggleFilter('free')">
+                                <div class="filter-checkbox" id="filter-free"></div>
+                                <span class="filter-label">مجانية</span>
+                                <span class="filter-count" id="count-free">0</span>
+                            </div>
+                            
+                            <div class="filter-item-main" onclick="toggleFilter('arabic')">
+                                <div class="filter-checkbox" id="filter-arabic"></div>
+                                <span class="filter-label">باللغة العربية</span>
+                                <span class="filter-count" id="count-arabic">0</span>
+                            </div>
+                            
+                            <div class="filter-item-main" onclick="toggleFilter('online')">
+                                <div class="filter-checkbox" id="filter-online"></div>
+                                <span class="filter-label">أونلاين</span>
+                                <span class="filter-count" id="count-online">0</span>
+                            </div>
+                        </div>
+                        
+                        <button class="clear-filters-btn-main" onclick="clearAllFilters()">
+                            <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -854,6 +1036,19 @@
         updateFilterCountsForCurrentData(filtered);
     }
 
+    function toggleFilterPanel() {
+        const panel = document.getElementById('filterPanel');
+        const arrow = document.getElementById('filterArrow');
+        
+        if (panel.classList.contains('show')) {
+            panel.classList.remove('show');
+            arrow.classList.remove('rotate');
+        } else {
+            panel.classList.add('show');
+            arrow.classList.add('rotate');
+        }
+    }
+
     function updateFilterCountsForCurrentData(data) {
         const supportCount = data.filter(item => 
             item.is_supported && 
@@ -889,11 +1084,14 @@
     function toggleFilter(filterName) {
         activeFilters[filterName] = !activeFilters[filterName];
         const checkbox = document.getElementById(`filter-${filterName}`);
+        const filterItem = checkbox.closest('.filter-item-main');
         
         if (activeFilters[filterName]) {
             checkbox.classList.add('checked');
+            if (filterItem) filterItem.classList.add('active');
         } else {
             checkbox.classList.remove('checked');
+            if (filterItem) filterItem.classList.remove('active');
         }
         
         // إعادة تطبيق الفلاتر تلقائياً
