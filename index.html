@@ -82,106 +82,6 @@
 
         .sidebar-menu { flex: 1; overflow-y: auto; padding: 15px 10px; }
         
-        /* Filter Section */
-        .filter-section {
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-            border-radius: 10px;
-        }
-        
-        .filter-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .filter-group {
-            margin-bottom: 10px;
-        }
-        
-        .filter-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 10px;
-            margin-bottom: 6px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        
-        .filter-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .filter-checkbox {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 4px;
-            margin-left: 10px;
-            position: relative;
-            flex-shrink: 0;
-            transition: 0.2s;
-        }
-        
-        .filter-checkbox.checked {
-            background: var(--color-3);
-            border-color: var(--color-3);
-        }
-        
-        .filter-checkbox.checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .filter-label {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.85rem;
-            flex: 1;
-        }
-        
-        .filter-count {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .clear-filters-btn {
-            width: 100%;
-            padding: 10px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
-        }
-        
-        .clear-filters-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
         .menu-btn {
             width: 100%; background: transparent; border: none; padding: 14px 20px;
             color: white; text-align: right; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 500;
@@ -272,32 +172,6 @@
             color: white;
             font-weight: 700;
         }
-        
-        .apply-selection-btn {
-            width: calc(100% - 20px);
-            margin: 0 10px 15px;
-            padding: 12px;
-            background: var(--color-3);
-            border: none;
-            color: white;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            display: none;
-        }
-        
-        .apply-selection-btn.show {
-            display: block;
-        }
-        
-        .apply-selection-btn:hover {
-            background: #38a565;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(66, 182, 119, 0.4);
-        }
 
         /* تظليل الخلفية عند فتح القائمة بالجوال */
         .sidebar-overlay {
@@ -349,6 +223,139 @@
         .hero-title { font-size: 1.2rem; font-weight: 800; color: var(--color-1); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
         .hero-title i { color: var(--color-3); font-size: 1.3rem; }
         .hero-text { color: var(--text-light); line-height: 1.8; font-size: 0.95rem; text-align: justify; }
+
+        /* --- Filter Section in Main Area --- */
+        .filter-section-main {
+            background: white;
+            margin: 20px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(2, 118, 128, 0.05);
+            border-top: 5px solid var(--color-2);
+            animation: slideDown 0.3s ease;
+        }
+
+        .filter-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-1);
+        }
+
+        .filter-header i {
+            color: var(--color-2);
+            font-size: 1.2rem;
+        }
+
+        .filter-items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-item-main {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(145deg, rgba(73, 186, 170, 0.05) 0%, rgba(66, 182, 119, 0.05) 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-item-main:hover {
+            border-color: var(--color-2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(73, 186, 170, 0.15);
+        }
+
+        .filter-item-main .filter-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--color-2);
+            border-radius: 6px;
+            margin-left: 12px;
+            position: relative;
+            flex-shrink: 0;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .filter-item-main .filter-checkbox.checked {
+            background: var(--color-3);
+            border-color: var(--color-3);
+        }
+
+        .filter-item-main .filter-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filter-item-main .filter-label {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .filter-item-main .filter-count {
+            background: var(--gradient-main);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .clear-filters-btn-main {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid var(--color-1);
+            color: var(--color-1);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .clear-filters-btn-main:hover {
+            background: var(--color-1);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(2, 118, 128, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .filter-items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* --- Grid & Cards --- */
         .grid-container { padding: 20px 20px 60px; }
@@ -498,54 +505,11 @@
             </div>
         </div>
         <div class="sidebar-menu">
-            <!-- Advanced Filters -->
-            <div class="filter-section">
-                <div class="filter-title">
-                    <i class="fas fa-filter"></i>
-                    فلترة متقدمة
-                </div>
-                
-                <div class="filter-group">
-                    <div class="filter-item" onclick="toggleFilter('support')">
-                        <div class="filter-checkbox" id="filter-support"></div>
-                        <span class="filter-label">مدعومة من هدف</span>
-                        <span class="filter-count" id="count-support">0</span>
-                    </div>
-                    
-                    <div class="filter-item" onclick="toggleFilter('free')">
-                        <div class="filter-checkbox" id="filter-free"></div>
-                        <span class="filter-label">مجانية</span>
-                        <span class="filter-count" id="count-free">0</span>
-                    </div>
-                    
-                    <div class="filter-item" onclick="toggleFilter('arabic')">
-                        <div class="filter-checkbox" id="filter-arabic"></div>
-                        <span class="filter-label">باللغة العربية</span>
-                        <span class="filter-count" id="count-arabic">0</span>
-                    </div>
-                    
-                    <div class="filter-item" onclick="toggleFilter('online')">
-                        <div class="filter-checkbox" id="filter-online"></div>
-                        <span class="filter-label">أونلاين</span>
-                        <span class="filter-count" id="count-online">0</span>
-                    </div>
-                </div>
-                
-                <button class="clear-filters-btn" onclick="clearAllFilters()">
-                    <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
-                </button>
-            </div>
-            
             <!-- Selection Summary -->
             <div class="selection-summary" id="selectionSummary">
                 <div class="summary-title">الأقسام المختارة</div>
                 <div class="summary-count" id="summaryCount">0 قسم</div>
             </div>
-            
-            <!-- Apply Button -->
-            <button class="apply-selection-btn" id="applyBtn" onclick="applySelection()">
-                <i class="fas fa-check-circle"></i> تطبيق التحديد
-            </button>
             
             <!-- Departments List -->
             <div id="sidebarMenu"></div>
@@ -579,6 +543,46 @@
                 <div class="hero-block">
                     <div class="hero-title"><i class="fas fa-bullseye"></i> نبذة عن الدليل وأهدافه</div>
                     <div class="hero-text">تم إعداد هذا الدليل لتقديم قائمة شاملة من الشهادات الاحترافية في تخصصات متنوعة، كإدارة الأعمال، تقنية المعلومات، والهندسة. يهدف إلى دعم الطالبات في اختيار الشهادات الأنسب لتعزيز مهاراتهن المهنية.</div>
+                </div>
+            </div>
+
+            <!-- Advanced Filters Section -->
+            <div class="filter-section-main" id="filterSection" style="display: none;">
+                <div class="filter-container">
+                    <div class="filter-header">
+                        <i class="fas fa-filter"></i>
+                        <span>فلترة متقدمة</span>
+                    </div>
+                    
+                    <div class="filter-items-grid">
+                        <div class="filter-item-main" onclick="toggleFilter('support')">
+                            <div class="filter-checkbox" id="filter-support"></div>
+                            <span class="filter-label">مدعومة من هدف</span>
+                            <span class="filter-count" id="count-support">0</span>
+                        </div>
+                        
+                        <div class="filter-item-main" onclick="toggleFilter('free')">
+                            <div class="filter-checkbox" id="filter-free"></div>
+                            <span class="filter-label">مجانية</span>
+                            <span class="filter-count" id="count-free">0</span>
+                        </div>
+                        
+                        <div class="filter-item-main" onclick="toggleFilter('arabic')">
+                            <div class="filter-checkbox" id="filter-arabic"></div>
+                            <span class="filter-label">باللغة العربية</span>
+                            <span class="filter-count" id="count-arabic">0</span>
+                        </div>
+                        
+                        <div class="filter-item-main" onclick="toggleFilter('online')">
+                            <div class="filter-checkbox" id="filter-online"></div>
+                            <span class="filter-label">أونلاين</span>
+                            <span class="filter-count" id="count-online">0</span>
+                        </div>
+                    </div>
+                    
+                    <button class="clear-filters-btn-main" onclick="clearAllFilters()">
+                        <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
+                    </button>
                 </div>
             </div>
 
@@ -787,11 +791,13 @@
         }
         
         updateSelectionSummary();
+        
+        // تطبيق التحديد تلقائياً
+        applySelectionAuto();
     }
 
     function updateSelectionSummary() {
         const summary = document.getElementById('selectionSummary');
-        const applyBtn = document.getElementById('applyBtn');
         const count = selectedDepts.size;
         
         document.getElementById('summaryCount').textContent = 
@@ -801,18 +807,25 @@
         
         if (count > 0) {
             summary.classList.add('show');
-            applyBtn.classList.add('show');
         } else {
             summary.classList.remove('show');
-            applyBtn.classList.remove('show');
         }
     }
 
-    function applySelection() {
+    function applySelectionAuto() {
+        const filterSection = document.getElementById('filterSection');
+        
         if (selectedDepts.size === 0) {
-            alert('يرجى اختيار قسم واحد على الأقل');
+            // إخفاء الفلتر والبيانات
+            filterSection.style.display = 'none';
+            currentData = [];
+            renderCards([]);
+            document.getElementById('sectionTitle').innerHTML = '<i class="fas fa-th-large"></i> اختر كلية وقسماً لعرض الشهادات';
             return;
         }
+
+        // إظهار الفلتر
+        filterSection.style.display = 'block';
 
         let filtered = [];
         selectedDepts.forEach(key => {
@@ -828,7 +841,7 @@
         renderCards(filtered);
         
         const titleSec = document.getElementById('sectionTitle');
-        titleSec.innerHTML = `<i class="fas fa-layer-group"></i> تم اختيار <span style="color:var(--color-1)">${selectedDepts.size}</span> قسم`;
+        titleSec.innerHTML = `<i class="fas fa-layer-group"></i> تم اختيار <span style="color:var(--color-1)">${selectedDepts.size}</span> ${selectedDepts.size === 1 ? 'قسم' : 'أقسام'} - <span style="color:var(--color-2)">${filtered.length}</span> شهادة`;
         
         document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
         
@@ -836,6 +849,41 @@
         if (window.innerWidth <= 900) {
             toggleSidebar();
         }
+        
+        // تحديث عدادات الفلاتر بناءً على البيانات الحالية
+        updateFilterCountsForCurrentData(filtered);
+    }
+
+    function updateFilterCountsForCurrentData(data) {
+        const supportCount = data.filter(item => 
+            item.is_supported && 
+            (item.is_supported.toString().toLowerCase().includes('نعم') || 
+             item.is_supported.toString().toLowerCase().includes('yes'))
+        ).length;
+        
+        const freeCount = data.filter(item => 
+            item.cost && 
+            (item.cost.toString().toLowerCase().includes('مجان') || 
+             item.cost.toString().toLowerCase().includes('free') ||
+             item.cost.toString() === '0')
+        ).length;
+        
+        const arabicCount = data.filter(item => 
+            item.language && 
+            item.language.toString().toLowerCase().includes('عرب')
+        ).length;
+        
+        const onlineCount = data.filter(item => 
+            item.mode && 
+            (item.mode.toString().toLowerCase().includes('أونلاين') ||
+             item.mode.toString().toLowerCase().includes('online') ||
+             item.mode.toString().toLowerCase().includes('عن بعد'))
+        ).length;
+        
+        document.getElementById('count-support').textContent = supportCount;
+        document.getElementById('count-free').textContent = freeCount;
+        document.getElementById('count-arabic').textContent = arabicCount;
+        document.getElementById('count-online').textContent = onlineCount;
     }
 
     function toggleFilter(filterName) {
@@ -848,11 +896,8 @@
             checkbox.classList.remove('checked');
         }
         
-        // إعادة تطبيق الفلاتر على البيانات الحالية
-        if (currentData.length > 0) {
-            const filtered = applyAdvancedFilters(currentData);
-            renderCards(filtered);
-        }
+        // إعادة تطبيق الفلاتر تلقائياً
+        applySelectionAuto();
     }
 
     function applyAdvancedFilters(data) {
@@ -902,10 +947,8 @@
             if (checkbox) checkbox.classList.remove('checked');
         });
         
-        // إعادة عرض البيانات بدون فلاتر
-        if (selectedDepts.size > 0) {
-            applySelection();
-        }
+        // إعادة تطبيق التحديد بدون فلاتر
+        applySelectionAuto();
     }
 
     function updateFilterCounts() {
