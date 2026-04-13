@@ -378,11 +378,9 @@
                     <div id="m-topics"></div>
                 </div>
 
-                <div class="info-grid" style="margin-bottom:20px;">
-                    <div class="info-item"><i class="fas fa-hourglass-half"></i><span>مدة الاختبار</span><strong id="m-dur"></strong></div>
-                    <div class="info-item"><i class="fas fa-question-circle"></i><span>الأسئلة</span><strong id="m-q"></strong></div>
-                    <div class="info-item"><i class="fas fa-vial"></i><span>نوع الأسئلة</span><strong id="m-qtype"></strong></div>
-                    <div class="info-item"><i class="fas fa-calendar-check"></i><span>الصلاحية</span><strong id="m-valid"></strong></div>
+                <div class="modal-section">
+                    <h4><i class="fas fa-calendar-check"></i> صلاحية الشهادة</h4>
+                    <div class="modal-text" id="m-valid"></div>
                 </div>
 
                 <div class="modal-section">
@@ -567,7 +565,7 @@
             card.className = 'card';
             card.innerHTML = `
                 <span class="provider-badge">${item.provider || 'N/A'}</span>
-                <h3>${item.title_ar || item.title_en}</h3>
+                <h3>${item.title_en || item.title_ar}</h3>
                 <p>${item.description ? item.description.substring(0, 100) + '...' : 'لا يوجد وصف متاح'}</p>
                 <div class="card-footer">
                     <div class="footer-item"><i class="fas fa-chart-simple"></i> ${item.level || '-'}</div>
@@ -596,7 +594,7 @@
         selectedCert = item; 
 
         document.getElementById('m-title').innerText = item.title_ar || item.title_en;
-        document.getElementById('m-sub').innerText = item.title_ar ? item.title_en : '';
+        document.getElementById('m-sub').innerText = item.title_en || '';
         document.getElementById('m-desc').innerText = item.description || 'لا يوجد وصف';
         document.getElementById('m-provider').innerText = item.provider || '-';
         document.getElementById('m-level').innerText = item.level || '-';
@@ -610,9 +608,6 @@
         document.getElementById('m-reg').innerText = item.registration_steps || '-';
         document.getElementById('m-res').innerText = item.resources || '-';
 
-        document.getElementById('m-dur').innerText = item.exam_duration || '-';
-        document.getElementById('m-q').innerText = item.questions_count || '-';
-        document.getElementById('m-qtype').innerText = item.questions_type || '-';
         document.getElementById('m-valid').innerText = item.validity || '-';
 
         const coursesDiv = document.getElementById('m-courses');
@@ -681,7 +676,7 @@
             <div class="single-cert-print">
                 <div class="print-header">
                     <h1 style="color:#027680; margin:0; font-size:18pt;">${selectedCert.title_ar || selectedCert.title_en}</h1>
-                    <h3 style="color:#555; margin:5px 0; font-size:14pt;">${selectedCert.title_ar ? selectedCert.title_en : ''}</h3>
+                    <h3 style="color:#555; margin:5px 0; font-size:14pt;">${selectedCert.title_en || ''}</h3>
                     <p style="margin-top:10px; font-size:12pt;">${selectedCert.college} - ${selectedCert.department}</p>
                 </div>
 
@@ -704,13 +699,8 @@
                 <div class="print-section-title">المتطلبات</div>
                 <p>${selectedCert.requirements || '-'}</p>
 
-                <div class="print-section-title">تفاصيل الاختبار</div>
-                <div class="print-grid">
-                    <div class="print-row"><span class="print-label">المدة:</span> ${selectedCert.exam_duration || '-'}</div>
-                    <div class="print-row"><span class="print-label">الأسئلة:</span> ${selectedCert.questions_count || '-'}</div>
-                    <div class="print-row"><span class="print-label">النوع:</span> ${selectedCert.questions_type || '-'}</div>
-                    <div class="print-row"><span class="print-label">الصلاحية:</span> ${selectedCert.validity || '-'}</div>
-                </div>
+                <div class="print-section-title">صلاحية الشهادة</div>
+                <p>${selectedCert.validity || '-'}</p>
 
                 <div class="print-section-title">معلومات إضافية</div>
                 <div class="print-row"><span class="print-label">خطوات التقديم:</span> ${selectedCert.registration_steps || '-'}</div>
