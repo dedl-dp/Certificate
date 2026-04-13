@@ -82,6 +82,106 @@
 
         .sidebar-menu { flex: 1; overflow-y: auto; padding: 15px 10px; }
         
+        /* Filter Section */
+        .filter-section {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        .filter-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-group {
+            margin-bottom: 10px;
+        }
+        
+        .filter-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .filter-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .filter-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 4px;
+            margin-left: 10px;
+            position: relative;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        
+        .filter-checkbox.checked {
+            background: var(--color-3);
+            border-color: var(--color-3);
+        }
+        
+        .filter-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .filter-label {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.85rem;
+            flex: 1;
+        }
+        
+        .filter-count {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .clear-filters-btn {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        
+        .clear-filters-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
         .menu-btn {
             width: 100%; background: transparent; border: none; padding: 14px 20px;
             color: white; text-align: right; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 500;
@@ -90,17 +190,114 @@
         }
         .menu-btn:hover { background: rgba(255,255,255,0.1); }
         .menu-btn.active { background: white; color: var(--color-1); font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .menu-btn.active i { transform: rotate(-90deg); color: var(--color-1); }
+        .menu-btn.active .arrow-icon { transform: rotate(-90deg); color: var(--color-1); }
         
         .submenu { display: none; margin-top: 2px; background: rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
         .submenu.open { display: block; animation: slideDown 0.3s ease; }
         
         .sub-item {
-            display: block; padding: 10px 20px 10px 15px; color: rgba(255,255,255,0.9);
-            text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.2s;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
             border-left: 3px solid transparent;
         }
-        .sub-item.current { background: rgba(255,255,255,0.15); border-left-color: var(--color-3); color: white; font-weight: bold; }
+        
+        .sub-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .sub-item.selected { 
+            background: rgba(255,255,255,0.15); 
+            border-left-color: var(--color-3); 
+            color: white; 
+            font-weight: bold; 
+        }
+        
+        .dept-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 3px;
+            margin-left: 10px;
+            position: relative;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        
+        .dept-checkbox.checked {
+            background: var(--color-3);
+            border-color: var(--color-3);
+        }
+        
+        .dept-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .dept-label {
+            flex: 1;
+        }
+        
+        .selection-summary {
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            margin: 10px 10px 15px;
+            display: none;
+        }
+        
+        .selection-summary.show {
+            display: block;
+        }
+        
+        .summary-title {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 5px;
+        }
+        
+        .summary-count {
+            font-size: 0.95rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .apply-selection-btn {
+            width: calc(100% - 20px);
+            margin: 0 10px 15px;
+            padding: 12px;
+            background: var(--color-3);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none;
+        }
+        
+        .apply-selection-btn.show {
+            display: block;
+        }
+        
+        .apply-selection-btn:hover {
+            background: #38a565;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 182, 119, 0.4);
+        }
 
         /* تظليل الخلفية عند فتح القائمة بالجوال */
         .sidebar-overlay {
@@ -300,7 +497,59 @@
                 <p>جامعة الأميرة نورة</p>
             </div>
         </div>
-        <div class="sidebar-menu" id="sidebarMenu"></div>
+        <div class="sidebar-menu">
+            <!-- Advanced Filters -->
+            <div class="filter-section">
+                <div class="filter-title">
+                    <i class="fas fa-filter"></i>
+                    فلترة متقدمة
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-item" onclick="toggleFilter('support')">
+                        <div class="filter-checkbox" id="filter-support"></div>
+                        <span class="filter-label">مدعومة من هدف</span>
+                        <span class="filter-count" id="count-support">0</span>
+                    </div>
+                    
+                    <div class="filter-item" onclick="toggleFilter('free')">
+                        <div class="filter-checkbox" id="filter-free"></div>
+                        <span class="filter-label">مجانية</span>
+                        <span class="filter-count" id="count-free">0</span>
+                    </div>
+                    
+                    <div class="filter-item" onclick="toggleFilter('arabic')">
+                        <div class="filter-checkbox" id="filter-arabic"></div>
+                        <span class="filter-label">باللغة العربية</span>
+                        <span class="filter-count" id="count-arabic">0</span>
+                    </div>
+                    
+                    <div class="filter-item" onclick="toggleFilter('online')">
+                        <div class="filter-checkbox" id="filter-online"></div>
+                        <span class="filter-label">أونلاين</span>
+                        <span class="filter-count" id="count-online">0</span>
+                    </div>
+                </div>
+                
+                <button class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
+                </button>
+            </div>
+            
+            <!-- Selection Summary -->
+            <div class="selection-summary" id="selectionSummary">
+                <div class="summary-title">الأقسام المختارة</div>
+                <div class="summary-count" id="summaryCount">0 قسم</div>
+            </div>
+            
+            <!-- Apply Button -->
+            <button class="apply-selection-btn" id="applyBtn" onclick="applySelection()">
+                <i class="fas fa-check-circle"></i> تطبيق التحديد
+            </button>
+            
+            <!-- Departments List -->
+            <div id="sidebarMenu"></div>
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -440,6 +689,13 @@
     let db = [];
     let currentData = [];
     let selectedCert = null;
+    let selectedDepts = new Set(); // لتخزين الأقسام المختارة
+    let activeFilters = {
+        support: false,
+        free: false,
+        arabic: false,
+        online: false
+    };
 
     async function loadExcelData() {
         try {
@@ -448,6 +704,7 @@
                 console.warn("Using empty DB");
                 document.getElementById('loader').style.display = 'none';
                 initSidebar();
+                updateFilterCounts();
                 return;
             }
             const arrayBuffer = await response.arrayBuffer();
@@ -457,6 +714,7 @@
             currentData = []; 
             document.getElementById('loader').style.display = 'none';
             initSidebar();
+            updateFilterCounts();
         } catch (error) {
             console.error(error);
             document.getElementById('loader').innerHTML = `<p style="color:red">خطأ في تحميل البيانات</p>`;
@@ -477,11 +735,20 @@
             
             const submenu = document.createElement('div');
             submenu.className = 'submenu';
-            submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', 'all', this)">عرض جميع الشهادات</a>`;
 
             const depts = [...new Set(db.filter(i => i.college === college).map(i => i.department))].filter(Boolean);
             depts.forEach(dept => {
-                submenu.innerHTML += `<a class="sub-item" onclick="filterByDept('${college}', '${dept}', this)">${dept}</a>`;
+                const deptItem = document.createElement('div');
+                deptItem.className = 'sub-item';
+                deptItem.innerHTML = `
+                    <div class="dept-checkbox"></div>
+                    <span class="dept-label">${dept}</span>
+                `;
+                deptItem.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleDepartment(college, dept, deptItem);
+                };
+                submenu.appendChild(deptItem);
             });
 
             btn.onclick = () => {
@@ -489,7 +756,8 @@
                 document.querySelectorAll('.submenu').forEach(s => s.classList.remove('open'));
                 document.querySelectorAll('.menu-btn').forEach(b => {
                     b.classList.remove('active');
-                    b.querySelector('.arrow-icon').style.transform = 'rotate(0deg)';
+                    const arrow = b.querySelector('.arrow-icon');
+                    if (arrow) arrow.style.transform = 'rotate(0deg)';
                 });
                 
                 if(!isOpen) {
@@ -504,34 +772,179 @@
         });
     }
 
+    function toggleDepartment(college, dept, element) {
+        const key = `${college}::${dept}`;
+        const checkbox = element.querySelector('.dept-checkbox');
+        
+        if (selectedDepts.has(key)) {
+            selectedDepts.delete(key);
+            checkbox.classList.remove('checked');
+            element.classList.remove('selected');
+        } else {
+            selectedDepts.add(key);
+            checkbox.classList.add('checked');
+            element.classList.add('selected');
+        }
+        
+        updateSelectionSummary();
+    }
+
+    function updateSelectionSummary() {
+        const summary = document.getElementById('selectionSummary');
+        const applyBtn = document.getElementById('applyBtn');
+        const count = selectedDepts.size;
+        
+        document.getElementById('summaryCount').textContent = 
+            count === 0 ? 'لا يوجد تحديد' : 
+            count === 1 ? 'قسم واحد' : 
+            `${count} أقسام`;
+        
+        if (count > 0) {
+            summary.classList.add('show');
+            applyBtn.classList.add('show');
+        } else {
+            summary.classList.remove('show');
+            applyBtn.classList.remove('show');
+        }
+    }
+
+    function applySelection() {
+        if (selectedDepts.size === 0) {
+            alert('يرجى اختيار قسم واحد على الأقل');
+            return;
+        }
+
+        let filtered = [];
+        selectedDepts.forEach(key => {
+            const [college, dept] = key.split('::');
+            const deptData = db.filter(i => i.college === college && i.department === dept);
+            filtered = [...filtered, ...deptData];
+        });
+
+        // تطبيق الفلاتر المتقدمة
+        filtered = applyAdvancedFilters(filtered);
+
+        currentData = filtered;
+        renderCards(filtered);
+        
+        const titleSec = document.getElementById('sectionTitle');
+        titleSec.innerHTML = `<i class="fas fa-layer-group"></i> تم اختيار <span style="color:var(--color-1)">${selectedDepts.size}</span> قسم`;
+        
+        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
+        
+        // إغلاق القائمة في الجوال
+        if (window.innerWidth <= 900) {
+            toggleSidebar();
+        }
+    }
+
+    function toggleFilter(filterName) {
+        activeFilters[filterName] = !activeFilters[filterName];
+        const checkbox = document.getElementById(`filter-${filterName}`);
+        
+        if (activeFilters[filterName]) {
+            checkbox.classList.add('checked');
+        } else {
+            checkbox.classList.remove('checked');
+        }
+        
+        // إعادة تطبيق الفلاتر على البيانات الحالية
+        if (currentData.length > 0) {
+            const filtered = applyAdvancedFilters(currentData);
+            renderCards(filtered);
+        }
+    }
+
+    function applyAdvancedFilters(data) {
+        let filtered = [...data];
+        
+        if (activeFilters.support) {
+            filtered = filtered.filter(item => 
+                item.is_supported && 
+                (item.is_supported.toString().toLowerCase().includes('نعم') || 
+                 item.is_supported.toString().toLowerCase().includes('yes'))
+            );
+        }
+        
+        if (activeFilters.free) {
+            filtered = filtered.filter(item => 
+                item.cost && 
+                (item.cost.toString().toLowerCase().includes('مجان') || 
+                 item.cost.toString().toLowerCase().includes('free') ||
+                 item.cost.toString() === '0')
+            );
+        }
+        
+        if (activeFilters.arabic) {
+            filtered = filtered.filter(item => 
+                item.language && 
+                item.language.toString().toLowerCase().includes('عرب')
+            );
+        }
+        
+        if (activeFilters.online) {
+            filtered = filtered.filter(item => 
+                item.mode && 
+                (item.mode.toString().toLowerCase().includes('أونلاين') ||
+                 item.mode.toString().toLowerCase().includes('online') ||
+                 item.mode.toString().toLowerCase().includes('عن بعد'))
+            );
+        }
+        
+        return filtered;
+    }
+
+    function clearAllFilters() {
+        // إلغاء جميع الفلاتر
+        Object.keys(activeFilters).forEach(key => {
+            activeFilters[key] = false;
+            const checkbox = document.getElementById(`filter-${key}`);
+            if (checkbox) checkbox.classList.remove('checked');
+        });
+        
+        // إعادة عرض البيانات بدون فلاتر
+        if (selectedDepts.size > 0) {
+            applySelection();
+        }
+    }
+
+    function updateFilterCounts() {
+        // حساب عدد الشهادات لكل فلتر
+        const supportCount = db.filter(item => 
+            item.is_supported && 
+            (item.is_supported.toString().toLowerCase().includes('نعم') || 
+             item.is_supported.toString().toLowerCase().includes('yes'))
+        ).length;
+        
+        const freeCount = db.filter(item => 
+            item.cost && 
+            (item.cost.toString().toLowerCase().includes('مجان') || 
+             item.cost.toString().toLowerCase().includes('free') ||
+             item.cost.toString() === '0')
+        ).length;
+        
+        const arabicCount = db.filter(item => 
+            item.language && 
+            item.language.toString().toLowerCase().includes('عرب')
+        ).length;
+        
+        const onlineCount = db.filter(item => 
+            item.mode && 
+            (item.mode.toString().toLowerCase().includes('أونلاين') ||
+             item.mode.toString().toLowerCase().includes('online') ||
+             item.mode.toString().toLowerCase().includes('عن بعد'))
+        ).length;
+        
+        document.getElementById('count-support').textContent = supportCount;
+        document.getElementById('count-free').textContent = freeCount;
+        document.getElementById('count-arabic').textContent = arabicCount;
+        document.getElementById('count-online').textContent = onlineCount;
+    }
+
     // Toggle Sidebar on Mobile
     function toggleSidebar() {
         document.querySelector('.sidebar').classList.toggle('active');
         document.querySelector('.sidebar-overlay').classList.toggle('active');
-    }
-
-    function filterByDept(college, dept, element) {
-        // Close sidebar on mobile
-        if(window.innerWidth <= 900) {
-            document.querySelector('.sidebar').classList.remove('active');
-            document.querySelector('.sidebar-overlay').classList.remove('active');
-        }
-
-        document.querySelectorAll('.sub-item').forEach(i => i.classList.remove('current'));
-        element.classList.add('current');
-        document.querySelector('.grid-container').scrollIntoView({ behavior: 'smooth' });
-
-        const titleSec = document.getElementById('sectionTitle');
-        titleSec.innerHTML = dept === 'all' ? 
-            `<i class="fas fa-layer-group"></i> شهادات: <span style="color:var(--color-1)">${college}</span>` : 
-            `<i class="fas fa-folder-open"></i> قسم: <span style="color:var(--color-1)">${dept}</span>`;
-
-        let filtered = db.filter(i => i.college === college);
-        if(dept !== 'all') {
-            filtered = filtered.filter(i => i.department === dept);
-        }
-        currentData = filtered; 
-        renderCards(filtered);
     }
 
     function handleSearch() {
