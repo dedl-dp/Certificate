@@ -224,122 +224,150 @@
         .hero-title i { color: var(--color-3); font-size: 1.3rem; }
         .hero-text { color: var(--text-light); line-height: 1.8; font-size: 0.95rem; text-align: justify; }
 
-        /* --- Filter Section in Main Area --- */
-        .filter-section-main {
-            background: white;
+        /* --- Filter Dropdown --- */
+        .filter-dropdown-wrapper {
             margin: 20px;
-            padding: 0;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e7eb;
-            overflow: hidden;
-        }
-
-        .filter-container {
             display: flex;
-            flex-direction: column;
+            justify-content: flex-end;
         }
 
-        .filter-toggle-btn {
+        .filter-dropdown-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .filter-dropdown-trigger {
             width: 100%;
             background: white;
-            border: none;
-            padding: 16px 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 10px;
             cursor: pointer;
-            transition: background 0.2s ease;
             font-family: inherit;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
-        .filter-toggle-btn:hover {
-            background: #f9fafb;
+        .filter-dropdown-trigger:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         }
 
-        .filter-toggle-btn > i:first-child {
-            color: var(--color-2);
-            font-size: 16px;
-        }
-
-        .filter-toggle-btn > span {
+        .filter-dropdown-trigger span {
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--text-dark);
-            flex: 1;
-            text-align: right;
         }
 
-        .filter-arrow {
-            color: #9ca3af;
+        .filter-dropdown-trigger .fa-filter {
+            color: var(--color-2);
             font-size: 14px;
+            margin-right: auto;
+        }
+
+        .filter-dropdown-arrow {
+            color: #9ca3af;
+            font-size: 12px;
             transition: transform 0.2s ease;
         }
 
-        .filter-arrow.rotate {
+        .filter-dropdown-arrow.rotate {
             transform: rotate(-180deg);
         }
 
-        .filter-panel {
-            padding: 0;
+        .filter-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 100%;
             background: white;
-            border-top: 1px solid #e5e7eb;
-            max-height: 0;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
             overflow: hidden;
-            transition: max-height 0.3s ease;
         }
 
-        .filter-panel.show {
-            max-height: 600px;
-            padding: 12px 0;
+        .filter-dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
-        .filter-items-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            padding: 0 16px;
-            margin-bottom: 12px;
-        }
-
-        .filter-item-main {
+        .filter-dropdown-item {
             display: flex;
             align-items: center;
-            padding: 10px 8px;
-            background: white;
-            border: none;
-            border-radius: 6px;
+            justify-content: space-between;
+            padding: 12px 16px;
             cursor: pointer;
             transition: background 0.15s ease;
-            gap: 10px;
+            border-bottom: 1px solid #f3f4f6;
         }
 
-        .filter-item-main:hover {
+        .filter-dropdown-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .filter-dropdown-item:hover {
             background: #f9fafb;
         }
 
-        .filter-item-main .filter-checkbox {
+        .filter-item-label {
+            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 400;
+        }
+
+        .filter-item-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-item-count {
+            min-width: 32px;
+            height: 24px;
+            background: #e0e7ff;
+            color: #6366f1;
+            border-radius: 12px;
+            padding: 0 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-item-checkbox {
             width: 18px;
             height: 18px;
             border: 2px solid #d1d5db;
             border-radius: 4px;
-            margin-left: 0;
             position: relative;
             flex-shrink: 0;
             transition: all 0.15s ease;
             background: white;
         }
 
-        .filter-item-main:hover .filter-checkbox {
+        .filter-dropdown-item:hover .filter-item-checkbox {
             border-color: #9ca3af;
         }
 
-        .filter-item-main .filter-checkbox.checked {
+        .filter-item-checkbox.checked {
             background: #6366f1;
             border-color: #6366f1;
         }
 
-        .filter-item-main .filter-checkbox.checked::after {
+        .filter-item-checkbox.checked::after {
             content: '✓';
             position: absolute;
             top: 50%;
@@ -350,43 +378,19 @@
             font-weight: bold;
         }
 
-        .filter-item-main .filter-label {
-            color: #374151;
-            font-size: 0.875rem;
-            font-weight: 400;
-            flex: 1;
+        .filter-dropdown-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e5e7eb;
+            background: #f9fafb;
         }
 
-        .filter-item-main.active .filter-label {
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-
-        .filter-item-main .filter-count {
-            background: #f3f4f6;
-            color: #6b7280;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            min-width: 24px;
-            text-align: center;
-        }
-
-        .filter-item-main.active .filter-count {
-            background: #eef2ff;
-            color: #6366f1;
-            font-weight: 600;
-        }
-
-        .clear-filters-btn-main {
-            width: calc(100% - 32px);
-            margin: 0 16px 12px;
-            padding: 10px 16px;
+        .filter-clear-btn {
+            width: 100%;
             background: #6366f1;
             border: none;
-            color: white;
             border-radius: 6px;
+            padding: 10px 16px;
+            color: white;
             font-family: inherit;
             font-size: 0.875rem;
             font-weight: 600;
@@ -398,17 +402,21 @@
             gap: 6px;
         }
 
-        .clear-filters-btn-main:hover {
+        .filter-clear-btn:hover {
             background: #4f46e5;
         }
 
-        .clear-filters-btn-main:active {
+        .filter-clear-btn:active {
             transform: scale(0.98);
         }
 
         @media (max-width: 768px) {
-            .filter-section-main {
+            .filter-dropdown-wrapper {
                 margin: 15px;
+            }
+
+            .filter-dropdown-container {
+                max-width: 100%;
             }
         }
 
@@ -601,45 +609,54 @@
                 </div>
             </div>
 
-            <!-- Advanced Filters Section -->
-            <div class="filter-section-main" id="filterSection" style="display: none;">
-                <div class="filter-container">
-                    <button class="filter-toggle-btn" onclick="toggleFilterPanel()">
-                        <i class="fas fa-filter"></i>
+            <!-- Advanced Filters Dropdown -->
+            <div class="filter-dropdown-wrapper" id="filterSection" style="display: none;">
+                <div class="filter-dropdown-container">
+                    <button class="filter-dropdown-trigger" onclick="toggleFilterPanel()">
                         <span>فلترة متقدمة</span>
-                        <i class="fas fa-chevron-down filter-arrow" id="filterArrow"></i>
+                        <i class="fas fa-filter"></i>
+                        <i class="fas fa-chevron-down filter-dropdown-arrow" id="filterArrow"></i>
                     </button>
                     
-                    <div class="filter-panel" id="filterPanel">
-                        <div class="filter-items-grid">
-                            <div class="filter-item-main" onclick="toggleFilter('support')">
-                                <div class="filter-checkbox" id="filter-support"></div>
-                                <span class="filter-label">مدعومة من هدف</span>
-                                <span class="filter-count" id="count-support">0</span>
-                            </div>
-                            
-                            <div class="filter-item-main" onclick="toggleFilter('free')">
-                                <div class="filter-checkbox" id="filter-free"></div>
-                                <span class="filter-label">مجانية</span>
-                                <span class="filter-count" id="count-free">0</span>
-                            </div>
-                            
-                            <div class="filter-item-main" onclick="toggleFilter('arabic')">
-                                <div class="filter-checkbox" id="filter-arabic"></div>
-                                <span class="filter-label">باللغة العربية</span>
-                                <span class="filter-count" id="count-arabic">0</span>
-                            </div>
-                            
-                            <div class="filter-item-main" onclick="toggleFilter('online')">
-                                <div class="filter-checkbox" id="filter-online"></div>
-                                <span class="filter-label">أونلاين</span>
-                                <span class="filter-count" id="count-online">0</span>
+                    <div class="filter-dropdown-menu" id="filterPanel">
+                        <div class="filter-dropdown-item" onclick="toggleFilter('support')">
+                            <span class="filter-item-label">مدعومة من هدف</span>
+                            <div class="filter-item-right">
+                                <span class="filter-item-count" id="count-support">0</span>
+                                <div class="filter-item-checkbox" id="filter-support"></div>
                             </div>
                         </div>
                         
-                        <button class="clear-filters-btn-main" onclick="clearAllFilters()">
-                            <i class="fas fa-times-circle"></i> إلغاء جميع الفلاتر
-                        </button>
+                        <div class="filter-dropdown-item" onclick="toggleFilter('free')">
+                            <span class="filter-item-label">مجانية</span>
+                            <div class="filter-item-right">
+                                <span class="filter-item-count" id="count-free">0</span>
+                                <div class="filter-item-checkbox" id="filter-free"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-dropdown-item" onclick="toggleFilter('arabic')">
+                            <span class="filter-item-label">باللغة العربية</span>
+                            <div class="filter-item-right">
+                                <span class="filter-item-count" id="count-arabic">0</span>
+                                <div class="filter-item-checkbox" id="filter-arabic"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-dropdown-item" onclick="toggleFilter('online')">
+                            <span class="filter-item-label">أونلاين</span>
+                            <div class="filter-item-right">
+                                <span class="filter-item-count" id="count-online">0</span>
+                                <div class="filter-item-checkbox" id="filter-online"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-dropdown-footer">
+                            <button class="filter-clear-btn" onclick="clearAllFilters()">
+                                <i class="fas fa-times-circle"></i>
+                                إلغاء جميع الفلاتر
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -960,14 +977,11 @@
     function toggleFilter(filterName) {
         activeFilters[filterName] = !activeFilters[filterName];
         const checkbox = document.getElementById(`filter-${filterName}`);
-        const filterItem = checkbox.closest('.filter-item-main');
         
         if (activeFilters[filterName]) {
             checkbox.classList.add('checked');
-            if (filterItem) filterItem.classList.add('active');
         } else {
             checkbox.classList.remove('checked');
-            if (filterItem) filterItem.classList.remove('active');
         }
         
         // إعادة تطبيق الفلاتر تلقائياً
