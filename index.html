@@ -229,16 +229,10 @@
             background: white;
             margin: 20px;
             padding: 0;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
             overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .filter-section-main:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06);
-            border-color: rgba(73, 186, 170, 0.3);
         }
 
         .filter-container {
@@ -248,164 +242,101 @@
 
         .filter-toggle-btn {
             width: 100%;
-            background: linear-gradient(to left, #ffffff 0%, #f8fafc 100%);
+            background: white;
             border: none;
-            padding: 18px 24px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.2s ease;
             font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-toggle-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 100%;
-            background: linear-gradient(to left, rgba(73, 186, 170, 0.08) 0%, rgba(66, 182, 119, 0.05) 100%);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .filter-toggle-btn:hover::before {
-            width: 100%;
         }
 
         .filter-toggle-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .filter-toggle-btn:active {
-            transform: translateY(0);
+            background: #f9fafb;
         }
 
         .filter-toggle-btn > i:first-child {
             color: var(--color-2);
-            font-size: 20px;
-            position: relative;
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .filter-toggle-btn:hover > i:first-child {
-            transform: scale(1.1);
+            font-size: 16px;
         }
 
         .filter-toggle-btn > span {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--color-1);
+            color: var(--text-dark);
             flex: 1;
             text-align: right;
-            position: relative;
-            z-index: 1;
-            letter-spacing: -0.01em;
         }
 
         .filter-arrow {
-            color: var(--text-light);
+            color: #9ca3af;
             font-size: 14px;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            z-index: 1;
+            transition: transform 0.2s ease;
         }
 
         .filter-arrow.rotate {
             transform: rotate(-180deg);
-            color: var(--color-2);
         }
 
         .filter-panel {
-            padding: 24px;
-            background: linear-gradient(to bottom, #fafbfc 0%, #ffffff 100%);
-            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            padding: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
             max-height: 0;
             overflow: hidden;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: max-height 0.3s ease;
         }
 
         .filter-panel.show {
-            max-height: 1000px;
-            opacity: 1;
+            max-height: 600px;
+            padding: 12px 0;
         }
 
         .filter-items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0 16px;
+            margin-bottom: 12px;
         }
 
         .filter-item-main {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
+            padding: 10px 8px;
             background: white;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 12px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-item-main::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 100%;
-            background: linear-gradient(to left, rgba(73, 186, 170, 0.06) 0%, rgba(66, 182, 119, 0.04) 100%);
-            transition: width 0.3s ease;
-        }
-
-        .filter-item-main:hover::before {
-            width: 100%;
+            transition: background 0.15s ease;
+            gap: 10px;
         }
 
         .filter-item-main:hover {
-            border-color: var(--color-2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(73, 186, 170, 0.15);
-        }
-
-        .filter-item-main:active {
-            transform: translateY(0);
-        }
-
-        .filter-item-main.active {
-            background: linear-gradient(135deg, rgba(73, 186, 170, 0.08) 0%, rgba(66, 182, 119, 0.08) 100%);
-            border-color: var(--color-3);
+            background: #f9fafb;
         }
 
         .filter-item-main .filter-checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #cbd5e1;
-            border-radius: 6px;
-            margin-left: 12px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            margin-left: 0;
             position: relative;
             flex-shrink: 0;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.15s ease;
             background: white;
-            z-index: 1;
         }
 
         .filter-item-main:hover .filter-checkbox {
-            border-color: var(--color-2);
+            border-color: #9ca3af;
         }
 
         .filter-item-main .filter-checkbox.checked {
-            background: linear-gradient(135deg, var(--color-3) 0%, var(--color-2) 100%);
-            border-color: var(--color-3);
-            transform: scale(1.05);
+            background: #6366f1;
+            border-color: #6366f1;
         }
 
         .filter-item-main .filter-checkbox.checked::after {
@@ -413,126 +344,71 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%);
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            animation: checkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes checkPop {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
         }
 
         .filter-item-main .filter-label {
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 400;
             flex: 1;
-            position: relative;
-            z-index: 1;
+        }
+
+        .filter-item-main.active .filter-label {
+            font-weight: 500;
+            color: var(--text-dark);
         }
 
         .filter-item-main .filter-count {
-            background: linear-gradient(135deg, var(--color-2) 0%, var(--color-3) 100%);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 2px 8px;
+            border-radius: 10px;
             font-size: 0.75rem;
-            font-weight: 700;
-            min-width: 28px;
+            font-weight: 500;
+            min-width: 24px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(73, 186, 170, 0.2);
-            position: relative;
-            z-index: 1;
+        }
+
+        .filter-item-main.active .filter-count {
+            background: #eef2ff;
+            color: #6366f1;
+            font-weight: 600;
         }
 
         .clear-filters-btn-main {
-            width: 100%;
-            max-width: 280px;
-            margin: 0 auto;
-            padding: 12px 24px;
-            background: white;
-            border: 2px solid var(--color-1);
-            color: var(--color-1);
-            border-radius: 12px;
+            width: calc(100% - 32px);
+            margin: 0 16px 12px;
+            padding: 10px 16px;
+            background: #6366f1;
+            border: none;
+            color: white;
+            border-radius: 6px;
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.15s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .clear-filters-btn-main::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: var(--color-1);
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-        }
-
-        .clear-filters-btn-main:hover::before {
-            width: 300%;
-            height: 300%;
+            gap: 6px;
         }
 
         .clear-filters-btn-main:hover {
-            color: white;
-            border-color: var(--color-1);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(2, 118, 128, 0.25);
+            background: #4f46e5;
         }
 
         .clear-filters-btn-main:active {
-            transform: translateY(0);
-        }
-
-        .clear-filters-btn-main i,
-        .clear-filters-btn-main span {
-            position: relative;
-            z-index: 1;
+            transform: scale(0.98);
         }
 
         @media (max-width: 768px) {
-            .filter-items-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .filter-toggle-btn {
-                padding: 16px 20px;
-            }
-            
-            .filter-panel {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .filter-items-grid {
-                gap: 10px;
-            }
-            
-            .filter-item-main {
-                padding: 12px 14px;
+            .filter-section-main {
+                margin: 15px;
             }
         }
 
